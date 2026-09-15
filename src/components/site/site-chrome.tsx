@@ -124,6 +124,7 @@ export function SiteFooter({locale}:{locale:Locale}){
    {href:`/${locale}/terms`,label:t.legal.terms.title},
    {href:`/${locale}/privacy-policy`,label:t.legal.privacy.title},
    {href:'/docs/ProgramOS_User_Guide_AR.pdf',label:t.footer.guide},
+   {href:'/docs/ProgramOS_Brochure_AR.pdf',label:t.footer.brochure},
   ]},
  ];
  return (

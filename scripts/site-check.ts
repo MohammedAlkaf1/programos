@@ -199,6 +199,8 @@ try{
  assert.equal(await menu.getAttribute('aria-expanded'),'true');
  await page.getByRole('navigation',{name:'القائمة'}).last().getByRole('link',{name:'الأسعار'}).click();
  await page.waitForURL(/pricing/);
+ // The menu closes in an effect that runs after the route change, so give it a moment rather than reading the attribute in the same tick.
+ await page.getByRole('button',{name:'القائمة'}).and(page.locator('[aria-expanded="false"]')).waitFor({timeout:5000}).catch(()=>{});
  assert.equal(await page.getByRole('button',{name:'القائمة'}).getAttribute('aria-expanded'),'false','the menu closes after navigating');
  step('The narrow screen menu opens, navigates and closes again');
 

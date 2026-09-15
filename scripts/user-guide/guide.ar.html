@@ -26,8 +26,7 @@
   .cover { height: 257mm; display: flex; flex-direction: column; justify-content: space-between; page-break-after: always; background: linear-gradient(160deg, var(--navy) 0%, #1b242e 100%); color: #eeebdf; border-radius: 10pt; padding: 22mm 18mm; position: relative; overflow: hidden; }
   .cover::after { content: ''; position: absolute; inset-inline-end: -60mm; bottom: -60mm; width: 160mm; height: 160mm; border-radius: 50%; border: 18mm solid rgba(229,138,60,.18); }
   .cover .brand { display: flex; align-items: center; gap: 10pt; }
-  .cover .mark { width: 34pt; height: 34pt; border-radius: 9pt; background: var(--copper); display: grid; place-items: center; }
-  .cover .mark i { width: 10pt; height: 10pt; background: #fff; border-radius: 3pt; display: block; }
+  .cover .mark { width: 34pt; height: 34pt; border-radius: 9pt; display: block; }
   .cover .brand b { font-size: 16pt; display: block; }
   .cover .brand span { font-size: 10pt; color: #b9c0c9; }
   .cover h1 { color: #eeebdf; font-size: 34pt; line-height: 1.2; margin-top: 10mm; }
@@ -78,7 +77,7 @@
 <body>
 
 <div class="cover">
-  <div class="brand"><span class="mark"><i></i></span><div><b>برنامج أو إس</b><span>منصة إدارة البرامج والمبادرات وقياس الأثر</span></div></div>
+  <div class="brand"><svg class="mark" viewBox="0 0 64 64" width="34" height="34" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#C16325"/><path d="M50 24C50 35 45 42 32 42C21 42 14.5 37 14.5 30C14.5 25 16 21 18 18" fill="none" stroke="#EEEBDF" stroke-width="5.5" stroke-linecap="round"/><circle cx="18" cy="18" r="4.6" fill="#283543"/><circle cx="32" cy="52.5" r="3.6" fill="#EEEBDF"/></svg><div><b>برنامج أو إس</b><span>منصة إدارة البرامج والمبادرات وقياس الأثر</span></div></div>
   <div>
     <div class="eyebrow">الوثائق</div>
     <h1>دليل المستخدم</h1>

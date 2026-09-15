@@ -35,7 +35,9 @@
     "docs:guide": "tsx scripts/user-guide.ts",
     "demo:mfa": "tsx scripts/demo-mfa.ts",
     "db:migrate": "prisma migrate deploy",
-    "scheduler": "tsx scripts/scheduler.ts"
+    "scheduler": "tsx scripts/scheduler.ts",
+    "brand:export": "tsx scripts/brand.ts",
+    "docs:brochure": "tsx scripts/brochure.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.125.0",

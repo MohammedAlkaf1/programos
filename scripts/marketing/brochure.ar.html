@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>الملف التعريفي · برنامج أو إس</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+  :root {
+    --navy: #283543; --navy-800: #1b242e; --navy-700: #3a4a62; --navy-400: #8a939e; --navy-300: #b9c0c9; --navy-200: #d6dae0;
+    --copper: #c16325; --copper-500: #e58a3c; --copper-100: #fbeee1;
+    --ivory: #eeebdf; --ivory-100: #faf9f5; --ivory-300: #f4f2ea;
+    --text: #1b242e; --muted: #566270; --line: rgba(40,53,67,.12);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, Arial, sans-serif; color: var(--text); font-size: 11pt; line-height: 1.8; background: #fff; }
+  h1, h2, h3, h4 { margin: 0; color: var(--navy); font-weight: 700; line-height: 1.3; }
+  p { margin: 0; }
+  .page { width: 210mm; height: 297mm; padding: 18mm 16mm; position: relative; overflow: hidden; page-break-after: always; background: #fff; }
+  .page.dark { background: var(--navy); color: var(--ivory); }
+  .page.ivory { background: var(--ivory-300); }
+  .page:last-child { page-break-after: auto; }
+  .eyebrow { color: var(--copper); font-size: 9.5pt; font-weight: 600; letter-spacing: .4px; margin-bottom: 4pt; }
+  .dark .eyebrow { color: var(--copper-500); }
+  .title { font-size: 24pt; margin-bottom: 8pt; }
+  .dark .title { color: var(--ivory); }
+  .lead { color: var(--muted); font-size: 11.5pt; max-width: 150mm; margin-bottom: 14pt; }
+  .dark .lead { color: var(--navy-300); }
+  .foot { position: absolute; bottom: 10mm; inset-inline: 16mm; display: flex; justify-content: space-between; font-size: 8.5pt; color: var(--navy-400); border-top: 1px solid var(--line); padding-top: 5pt; }
+  .dark .foot { color: var(--navy-300); border-color: rgba(238,235,223,.15); }
+  .mark { display: block; }
+
+  /* Cover */
+  .cover { padding: 0; display: flex; flex-direction: column; }
+  .cover .top { padding: 18mm 16mm 0; display: flex; align-items: center; gap: 10pt; }
+  .cover .top b { font-size: 14pt; display: block; line-height: 1.2; }
+  .cover .top span { font-size: 9.5pt; color: var(--navy-300); }
+  .cover .hero { flex: 1; padding: 0 16mm; display: flex; flex-direction: column; justify-content: center; position: relative; }
+  .cover h1 { color: var(--ivory); font-size: 38pt; line-height: 1.2; max-width: 150mm; }
+  .cover .sub { color: var(--navy-300); font-size: 13.5pt; margin-top: 10pt; max-width: 135mm; line-height: 1.7; }
+  .cover .rail { position: absolute; inset-inline-start: -30mm; bottom: -20mm; width: 200mm; height: 200mm; opacity: .16; }
+  .cover .bottom { padding: 0 16mm 16mm; display: flex; justify-content: space-between; align-items: flex-end; }
+  .cover .pill { display: inline-flex; gap: 6pt; align-items: center; background: rgba(238,235,223,.08); border: 1px solid rgba(238,235,223,.18); border-radius: 999px; padding: 4pt 12pt; font-size: 9.5pt; color: var(--ivory); }
+  .cover .pill i { width: 6pt; height: 6pt; border-radius: 50%; background: var(--copper-500); display: inline-block; }
+  .cover .bottom small { font-size: 9pt; color: var(--navy-300); }
+
+  /* Cards */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10pt; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8pt; }
+  .card { border: 1px solid var(--line); border-radius: 10pt; padding: 11pt 12pt; background: #fff; }
+  .card h3 { font-size: 11.5pt; margin-bottom: 3pt; }
+  .card p { font-size: 9.8pt; color: var(--muted); line-height: 1.7; }
+  .card.copper { background: var(--copper-100); border-color: transparent; }
+  .card.navy { background: var(--navy); border-color: transparent; color: var(--ivory); }
+  .card.navy h3 { color: var(--ivory); } .card.navy p { color: var(--navy-300); }
+  .num { display: inline-grid; place-items: center; width: 20pt; height: 20pt; border-radius: 50%; background: var(--copper); color: #fff; font-weight: 700; font-size: 10pt; margin-bottom: 6pt; }
+  .section { margin-top: 14pt; }
+  .h2 { font-size: 17pt; margin-bottom: 6pt; }
+  .dark .h2 { color: var(--ivory); }
+
+  /* Journey */
+  .journey { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6pt; position: relative; margin-top: 10pt; }
+  .journey::before { content: ''; position: absolute; top: 10pt; inset-inline: 8%; height: 2pt; background: var(--navy-200); }
+  .journey div { position: relative; padding-top: 28pt; text-align: center; }
+  .journey div::before { content: attr(data-n); position: absolute; top: 0; inset-inline-start: 50%; transform: translateX(50%); width: 20pt; height: 20pt; border-radius: 50%; background: var(--copper); color: #fff; font-size: 9.5pt; font-weight: 700; display: grid; place-items: center; }
+  .journey b { display: block; font-size: 10.5pt; color: var(--navy); margin-bottom: 2pt; }
+  .journey span { font-size: 9pt; color: var(--muted); line-height: 1.6; display: block; }
+
+  /* Screens */
+  figure { margin: 0; }
+  figure img { width: 100%; display: block; border-radius: 8pt; border: 1px solid var(--line); box-shadow: 0 6pt 24pt rgba(40,53,67,.14); }
+  figcaption { font-size: 9pt; color: var(--muted); margin-top: 5pt; }
+  .screen-wrap { background: var(--ivory-300); border-radius: 12pt; padding: 12pt 12pt 10pt; }
+
+  /* Measurement */
+  .points { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; }
+  .point { display: flex; gap: 9pt; align-items: flex-start; }
+  .point i { flex: none; width: 8pt; height: 8pt; margin-top: 6pt; border-radius: 50%; background: var(--copper); }
+  .point b { display: block; font-size: 11pt; color: var(--navy); }
+  .point p { font-size: 9.8pt; color: var(--muted); }
+  .quote { border-inline-start: 4pt solid var(--copper); background: var(--copper-100); padding: 10pt 14pt; border-radius: 8pt; font-size: 11pt; color: var(--navy); margin-top: 12pt; }
+  .stat { text-align: center; padding: 10pt; }
+  .stat b { display: block; font-size: 26pt; color: var(--copper); line-height: 1.1; }
+  .stat span { font-size: 9.5pt; color: var(--muted); }
+
+  /* Plans */
+  .plans { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8pt; margin-top: 8pt; }
+  .plan { border: 1px solid var(--line); border-radius: 10pt; padding: 12pt 11pt; display: flex; flex-direction: column; gap: 6pt; min-height: 118mm; }
+  .plan.featured { border: 2px solid var(--copper); position: relative; }
+  .plan.featured::before { content: 'الأكثر اختيارًا'; position: absolute; top: -8pt; inset-inline-start: 10pt; background: var(--copper); color: #fff; font-size: 8pt; padding: 1pt 8pt; border-radius: 999px; font-weight: 600; }
+  .plan h3 { font-size: 13pt; }
+  .plan .price { font-size: 20pt; font-weight: 700; color: var(--navy); line-height: 1.1; }
+  .plan .price small { font-size: 9pt; color: var(--muted); font-weight: 400; }
+  .plan .desc { font-size: 9pt; color: var(--muted); min-height: 30pt; }
+  .plan ul { margin: 0; padding: 0; list-style: none; font-size: 9pt; color: var(--text); }
+  .plan li { padding: 3pt 0; border-top: 1px dashed var(--line); }
+  .plan li::before { content: '✓'; color: var(--copper); font-weight: 700; margin-inline-end: 5pt; }
+  .plan .limits { font-size: 8.8pt; color: var(--muted); background: var(--ivory-300); border-radius: 6pt; padding: 5pt 7pt; }
+  .notes { font-size: 9pt; color: var(--muted); margin-top: 10pt; line-height: 1.7; }
+  .all { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4pt 12pt; font-size: 9.5pt; margin-top: 6pt; }
+  .all span::before { content: '•'; color: var(--copper); margin-inline-end: 5pt; }
+
+  /* Roles strip and comparison */
+  .roles { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6pt; margin-top: 8pt; }
+  .roles div { background: #fff; border: 1px solid var(--line); border-radius: 8pt; padding: 8pt 6pt; text-align: center; }
+  .roles b { display: block; font-size: 9.5pt; color: var(--navy); margin-bottom: 2pt; }
+  .roles span { font-size: 8pt; color: var(--muted); line-height: 1.5; display: block; }
+  .compare { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 9.8pt; margin-top: 8pt; border: 1px solid var(--line); border-radius: 10pt; overflow: hidden; }
+  .compare th { background: var(--navy); color: var(--ivory); font-weight: 600; padding: 7pt 10pt; text-align: start; font-size: 10pt; }
+  .compare th:first-child { background: var(--navy-700); width: 26%; }
+  .compare td { padding: 7pt 10pt; border-top: 1px solid var(--line); vertical-align: top; color: var(--muted); line-height: 1.6; }
+  .compare td:first-child { font-weight: 600; color: var(--navy); }
+  .compare td:last-child { color: var(--text); background: var(--copper-100); }
+  .back .rail { position: absolute; inset-inline-end: -40mm; top: 70mm; width: 190mm; height: 190mm; opacity: .12; }
+
+  /* Back cover */
+  .back { display: flex; flex-direction: column; justify-content: space-between; }
+  .back h2 { color: var(--ivory); font-size: 28pt; line-height: 1.25; max-width: 140mm; }
+  .back .lead { color: var(--navy-300); font-size: 12.5pt; }
+  .contact { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; margin-top: 16pt; }
+  .contact div { background: rgba(238,235,223,.06); border: 1px solid rgba(238,235,223,.15); border-radius: 10pt; padding: 12pt 14pt; }
+  .contact b { display: block; color: var(--navy-300); font-size: 9pt; font-weight: 500; margin-bottom: 2pt; }
+  .contact span { color: var(--ivory); font-size: 13pt; font-weight: 600; direction: ltr; display: inline-block; }
+  .steps-mini { counter-reset: s; list-style: none; padding: 0; margin: 10pt 0 0; display: grid; grid-template-columns: repeat(3,1fr); gap: 8pt; }
+  .steps-mini li { counter-increment: s; background: rgba(238,235,223,.06); border-radius: 10pt; padding: 10pt 12pt; font-size: 10pt; color: var(--ivory); }
+  .steps-mini li::before { content: counter(s); display: inline-grid; place-items: center; width: 18pt; height: 18pt; border-radius: 50%; background: var(--copper); color: #fff; font-size: 9pt; font-weight: 700; margin-inline-end: 6pt; }
+</style>
+</head>
+<body>
+
+<!-- 1. Cover -->
+<section class="page dark cover">
+  <div class="top">
+    <svg class="mark" viewBox="0 0 64 64" width="40" height="40" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#C16325"/><path d="M50 24C50 35 45 42 32 42C21 42 14.5 37 14.5 30C14.5 25 16 21 18 18" fill="none" stroke="#EEEBDF" stroke-width="5.5" stroke-linecap="round"/><circle cx="18" cy="18" r="4.6" fill="#283543"/><circle cx="32" cy="52.5" r="3.6" fill="#EEEBDF"/></svg>
+    <div><b>برنامج أو إس</b><span>منصة إدارة البرامج والمبادرات وقياس الأثر</span></div>
+  </div>
+  <div class="hero">
+    <svg class="rail" viewBox="0 0 64 64" aria-hidden="true"><path d="M50 24C50 35 45 42 32 42C21 42 14.5 37 14.5 30C14.5 25 16 21 18 18" fill="none" stroke="#C16325" stroke-width="5.5" stroke-linecap="round"/><circle cx="18" cy="18" r="4.6" fill="#EEEBDF"/><circle cx="32" cy="52.5" r="3.6" fill="#C16325"/></svg>
+    <div class="eyebrow">الملف التعريفي</div>
+    <h1>أدِر برامجك، وأثبت نتائجها بالأرقام</h1>
+    <p class="sub">منصة سعودية تجمع الطلبات والتقييم والقرار والحضور والقياس في مكان واحد، فتعرف حالة كل مستفيد في أي لحظة، وتُخرج تقريرًا يستطيع أي شخص التحقق من كل رقم فيه.</p>
+  </div>
+  <div class="bottom">
+    <div style="display:flex;gap:8pt;flex-wrap:wrap">
+      <span class="pill"><i></i>للجمعيات والمؤسسات غير الربحية</span>
+      <span class="pill"><i></i>للجهات الحكومية والتنموية</span>
+      <span class="pill"><i></i>لجهات التدريب والمسرّعات</span>
+    </div>
+    <small>{{date}}</small>
+  </div>
+</section>
+
+<!-- 2. Problem + audience -->
+<section class="page">
+  <div class="eyebrow">لماذا برنامج أو إس</div>
+  <h2 class="title">الملفات المتفرقة تكلفك أكثر مما تظن</h2>
+  <p class="lead">حين تتوزع الطلبات على جدول، والحضور على مجموعة محادثة، والنتائج على ملف لدى موظف واحد، يصبح كل سؤال بسيط مشروعًا بحد ذاته.</p>
+  <div class="grid3">
+    <div class="card"><h3>لا أحد يعرف حالة المستفيد</h3><p>الطلب في بريد، والقرار في محادثة، والحضور في ورقة. الإجابة تحتاج ثلاثة أشخاص ويومًا كاملًا.</p></div>
+    <div class="card"><h3>التقرير لا يمكن إعادة إنتاجه</h3><p>الرقم في العرض التقديمي لا يعود إلى مصدر. تسأل عن أصله بعد شهر فلا تجد إجابة.</p></div>
+    <div class="card"><h3>الأثر يبقى انطباعًا</h3><p>تعرف أن البرنامج نافع، لكنك لا تملك قياسًا قبليًا وختاميًا يثبت مقدار التغير ولمن حدث.</p></div>
+  </div>
+
+  <div class="section">
+    <h2 class="h2">مبنية لمن يدير برامج تصل إلى الناس</h2>
+    <p class="lead" style="margin-bottom:10pt">ليست أداة مشاريع عامة. كل شاشة فيها مصممة حول المستفيد والبرنامج والنتيجة.</p>
+    <div class="grid3">
+      <div class="card copper"><h3>الجمعيات والمؤسسات غير الربحية</h3><p>برامج تدريب وتمكين ورعاية، بتقارير يطلبها المانح والجهة الرقابية في نهاية كل دورة.</p></div>
+      <div class="card copper"><h3>الجهات الحكومية والبرامج التنموية</h3><p>مبادرات متعددة البرامج، بحاجة إلى صورة موحدة وأرقام يمكن الدفاع عنها أمام لجنة.</p></div>
+      <div class="card copper"><h3>جهات التدريب والمسرّعات</h3><p>دفعات متتابعة بتسجيل وفرز وقبول وحضور، وقياس لما تغيّر لدى المشارك فعلًا.</p></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="h2">ما تحصل عليه من اليوم الأول</h2>
+    <div class="grid4">
+      <div class="card navy"><h3>البيانات داخل السعودية</h3><p>قاعدة البيانات والملفات والنسخ الاحتياطية في نطاق تختاره أنت.</p></div>
+      <div class="card navy"><h3>عزل كامل بين الجهات</h3><p>كل جهة في مساحتها. لا استعلام ولا تقرير ولا ملف يعبر الحدود.</p></div>
+      <div class="card navy"><h3>سجل تدقيق لكل عملية</h3><p>من فعل، ومتى، ولماذا، مع المعرّف الذي يربط العملية بطلبها.</p></div>
+      <div class="card navy"><h3>عربي وإنجليزي معًا</h3><p>واجهة كاملة بالاتجاهين، وتواريخ بتوقيت الرياض في كل شاشة.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>برنامج أو إس · الملف التعريفي</span><span>2</span></div>
+</section>
+
+<!-- 3. Journey + dashboard -->
+<section class="page">
+  <div class="eyebrow">كيف تعمل المنصة</div>
+  <h2 class="title">من فتح التسجيل إلى التقرير الموثق</h2>
+  <p class="lead">الرحلة نفسها التي يعيشها فريقك اليوم، لكن في مسار واحد كل خطوة فيه مسجلة.</p>
+  <div class="journey">
+    <div data-n="1"><b>جهّز البرنامج</b><span>المواعيد والسعة ونموذج التقديم ومعايير التقييم وإشعار الخصوصية.</span></div>
+    <div data-n="2"><b>افتح التسجيل</b><span>يقدّم المستفيد طلبه، فيصله رقم مرجعي ويصل فريقك إشعار فوري.</span></div>
+    <div data-n="3"><b>قيّم وقرر</b><span>يفرز المنسق، ويقيّم المقيّم بمعايير موزونة، ويقرر المدير بمبرر مكتوب.</span></div>
+    <div data-n="4"><b>نفّذ وتابع</b><span>أنشطة وحضور ومتابعة إكمال، مع تعليق واستئناف وانسحاب حين يلزم.</span></div>
+    <div data-n="5"><b>قِس وأصدر</b><span>قياس قبلي وختامي معتمد، ثم تقرير بلقطة ثابتة يمكن الرجوع إليها بعد سنة.</span></div>
+  </div>
+  <div class="section screen-wrap">
+    <figure><img src="{{shot:dashboard}}" alt="لوحة المعلومات"><figcaption>لوحة المعلومات: البرامج والطلبات والملتحقون ونسبة الإكمال، وما يحتاج قرارًا اليوم.</figcaption></figure>
+  </div>
+  <div class="foot"><span>برنامج أو إس · الملف التعريفي</span><span>3</span></div>
+</section>
+
+<!-- 4. Modules -->
+<section class="page ivory">
+  <div class="eyebrow">المنتج</div>
+  <h2 class="title">وحدة لكل خطوة في رحلة البرنامج</h2>
+  <p class="lead">كل ما تحتاجه لتشغيل برنامج من أول فكرة إلى آخر تقرير، دون أدوات جانبية.</p>
+  <div class="grid2">
+    <div class="card"><span class="num">1</span><h3>المبادرات والبرامج</h3><p>أنشئ البرنامج بمواعيده وسعته وشروط إكماله، وأدِر دورة حياته من المسودة إلى الأرشفة. لا يُنشر برنامج بلا نموذج ومعايير كاملة وإشعار خصوصية ومسؤول فعّال.</p></div>
+    <div class="card"><span class="num">2</span><h3>النماذج والطلبات</h3><p>صمم نموذج التقديم بحقول محددة، واحفظ نسخته مع كل طلب فلا تتغير القواعد بعد التقديم. طلب الاستكمال على مستوى الحقل مع حفظ الإجابة السابقة.</p></div>
+    <div class="card"><span class="num">3</span><h3>التقييم والقرار</h3><p>معايير موزونة ومقيّمون مُسندون وتعارض مصالح معلن، والقرار بمبرر مكتوب يبقى في السجل ويصل صاحبه إشعار واحد لا أكثر.</p></div>
+    <div class="card"><span class="num">4</span><h3>المستفيدون والمشاركات</h3><p>ملف موحد داخل الجهة يجمع طلبات الشخص ومشاركاته وحضوره ونتائجه في مكان واحد، ويعدّل الشخص بياناته بنفسه.</p></div>
+    <div class="card"><span class="num">5</span><h3>الأنشطة والحضور</h3><p>جدول الأنشطة وسجل الحضور، وشرط إكمال يُحتسب آليًا ولا يُتجاوز بالخطأ، ورابط تقويم لكل برنامج يعمل في أي تطبيق.</p></div>
+    <div class="card"><span class="num">6</span><h3>المؤشرات والأثر</h3><p>مؤشرات بوحدات ومستهدفات، وقياس قبلي وختامي يُعتمد قبل أن يدخل أي تقرير، وقاموس مؤشرات موحد بتعريفات مكتوبة.</p></div>
+    <div class="card"><span class="num">7</span><h3>التقارير والتصدير</h3><p>لوحات تشغيل ونتائج، ولقطات محفوظة لا تتغير، وتصدير برابط مؤقت يُعاد التحقق منه عند التنزيل.</p></div>
+    <div class="card"><span class="num">8</span><h3>الخصوصية والتدقيق</h3><p>طلبات حقوق أصحاب البيانات الخمسة، وسياسة احتفاظ لكل جهة، وإتلاف باعتماد بشري وشاهد موثق، وحجز قانوني عند الحاجة.</p></div>
+  </div>
+  <div class="section">
+    <h2 class="h2" style="font-size:14pt">سبعة أدوار، كل واحد يرى ما يحتاجه لعمله فقط</h2>
+    <div class="roles">
+      <div><b>مدير النظام</b><span>كل شيء، والفريق والصلاحيات وسجل التدقيق</span></div>
+      <div><b>مدير برامج</b><span>إنشاء البرامج والقرارات والأنشطة والتقارير</span></div>
+      <div><b>منسق</b><span>الأنشطة والحضور وفرز الطلبات</span></div>
+      <div><b>مقيّم</b><span>الطلبات المسندة إليه فقط</span></div>
+      <div><b>أخصائي أثر</b><span>المؤشرات واعتماد القياسات والتقارير</span></div>
+      <div><b>مشاهد</b><span>أرقام مجمعة بلا بيانات شخصية</span></div>
+      <div><b>مستفيد</b><span>طلباته هو، والتقديم على البرامج المفتوحة</span></div>
+    </div>
+  </div>
+  <div class="foot"><span>برنامج أو إس · الملف التعريفي</span><span>4</span></div>
+</section>
+
+<!-- 5. Measurement -->
+<section class="page">
+  <div class="eyebrow">ما يميز المنصة</div>
+  <h2 class="title">نقيس التغير، ولا ندّعي ما لا يثبته القياس</h2>
+  <p class="lead">أغلب التقارير تعرض رقمًا واحدًا بلا مصدر. هنا كل رقم يعود إلى قياسات فردية معتمدة، ويُعرض معه عدد الأزواج المكتملة ونسبة التغطية، فيعرف القارئ قوة الدليل لا النتيجة وحدها.</p>
+  <div class="points">
+    <div class="point"><i></i><div><b>زوج قياس لكل مشارك</b><p>قياس قبل البرنامج وآخر بعده للشخص نفسه. الزوج الناقص لا يدخل الحساب ولا يُخفى.</p></div></div>
+    <div class="point"><i></i><div><b>اعتماد قبل الاحتساب</b><p>القياس يبقى مسودة حتى يعتمده أخصائي الأثر، وتصحيحه لاحقًا يتطلب سببًا ويحفظ القيمة السابقة.</p></div></div>
+    <div class="point"><i></i><div><b>تغطية معلنة</b><p>إن اكتمل القياس لأربعين من ستين مشاركًا فالتقرير يقول ذلك صراحة بدل أن يعمم على الجميع.</p></div></div>
+    <div class="point"><i></i><div><b>لا قفزة إلى السببية</b><p>الفرق بين قبل وبعد يُسمى تغيرًا. نسبته إلى البرنامج وحده ادعاء يحتاج تصميمًا بحثيًا مختلفًا، ونقولها بوضوح.</p></div></div>
+  </div>
+  <div class="quote">هذا الوضوح ليس تواضعًا زائدًا. هو ما يجعل تقريرك قابلًا للدفاع عنه أمام ممول أو جهة رقابية.</div>
+  <div class="section screen-wrap">
+    <figure><img src="{{shot:impact}}" alt="شاشة قياس الأثر"><figcaption>قياس الأثر: خط الأساس والقياس الختامي لكل مشارك، والاعتماد قبل أن يدخل أي رقم في التقرير.</figcaption></figure>
+  </div>
+  <div class="foot"><span>برنامج أو إس · الملف التعريفي</span><span>5</span></div>
+</section>
+
+<!-- 6. Security + platform -->
+<section class="page ivory">
+  <div class="eyebrow">الأمان والخصوصية</div>
+  <h2 class="title">مبني على أن البيانات أمانة</h2>
+  <p class="lead">المستفيد يسلّمك بياناته لأنه يريد خدمة، لا ليصبح صفًا في ملف. الضوابط التالية ليست إعدادات يمكن نسيانها، بل جزء من بنية المنتج.</p>
+  <div class="grid3">
+    <div class="card"><h3>تحقق بخطوتين إلزامي</h3><p>لكل من يصل إلى بيانات الجهة من الفريق، وجلسة تنتهي بالخمول أو بعد اثنتي عشرة ساعة.</p></div>
+    <div class="card"><h3>صلاحيات بنطاق برنامج</h3><p>المقيّم يرى ما أُسند إليه فقط، والمشاهد يرى أرقامًا مجمعة بلا أسماء.</p></div>
+    <div class="card"><h3>حقوق أصحاب البيانات</h3><p>الاطلاع والنسخة والتصحيح والحذف وسحب الموافقة، كلها مسارات منفذة بمهلة نظامية ومتابعة.</p></div>
+    <div class="card"><h3>احتفاظ وإتلاف منضبط</h3><p>مدة احتفاظ لكل جهة، وقائمة إتلاف يعتمدها المدير، وحجز قانوني يوقف الإتلاف عند الحاجة.</p></div>
+    <div class="card"><h3>فحص المرفقات</h3><p>كل ملف يُفحص قبل أن يصبح قابلًا للتنزيل، والملف المشبوه يُعزل ولا يقبل الطلب به.</p></div>
+    <div class="card"><h3>قابلية التتبع</h3><p>معرّف لكل طلب يظهر في الاستجابة وفي سجل التدقيق، فتتبع أي حادثة من طرفها إلى طرفها.</p></div>
+  </div>
+
+  <div class="section">
+    <h2 class="h2">مفتوح على أدواتك، ومساعد لا يقرر بدلًا عنك</h2>
+    <div class="grid2" style="margin-top:8pt">
+      <div class="card navy">
+        <h3>واجهة برمجية وإشعارات أحداث</h3>
+        <p>اقرأ البرامج والطلبات والنتائج بمفتاح له صلاحيات محددة، واستقبل الأحداث فور وقوعها بطلب موقَّع. الموصلات ترسل ما تسمح به خريطة حقولك فقط، وتعطُّل أي نظام خارجي يبقى في طابور إعادة المحاولة دون أن يوقف برنامجًا.</p>
+        <p style="margin-top:6pt">مفاتيح بصلاحيات وتدوير وإلغاء فوري · توقيع يشمل الوقت · استيراد من CSV بمعاينة · دخول موحّد OIDC · رسائل قصيرة وواتساب بموافقة مسجلة.</p>
+      </div>
+      <div class="card navy">
+        <h3>مساعد اختياري تحت سيطرتك</h3>
+        <p>يكتب مسودة وصف برنامج، ويلخص النتائج، ويجيب من مستندات جهتك. معطّل حتى تفعّله، وله سقف إنفاق شهري، وكل رقم في ملخصه يجب أن يطابق قياسًا في النظام وإلا رُفض الملخص كاملًا.</p>
+        <p style="margin-top:6pt">لا يقبل ولا يرفض ولا يرتب أهلية · مخرجه مسودة حتى يعتمدها شخص باسمه · الاسترجاع داخل جهتك وحدها.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>برنامج أو إس · الملف التعريفي</span><span>6</span></div>
+</section>
+
+<!-- 7. Reports + plans -->
+<section class="page">
+  <div class="eyebrow">التقارير</div>
+  <h2 class="title">تقرير يمكن الرجوع إليه بعد سنة</h2>
+  <div class="screen-wrap">
+    <figure><img src="{{shot:reports}}" alt="شاشة التقارير"><figcaption>التقارير: لوحات تشغيل ونتائج، ولقطات محفوظة بنطاق وتاريخ قطع لا تتغير بعد إصدارها.</figcaption></figure>
+  </div>
+  <div class="grid3" style="margin-top:10pt">
+    <div class="stat"><b>5</b><span>طلبات حقوق البيانات منفذة كاملة</span></div>
+    <div class="stat"><b>7</b><span>أدوار بصلاحيات مفصولة بنطاق البرنامج</span></div>
+    <div class="stat"><b>15</b><span>دقيقة صلاحية لكل رابط تصدير</span></div>
+  </div>
+  <div class="section">
+    <h2 class="h2" style="font-size:14pt">ما الذي يتغير فعلًا</h2>
+    <table class="compare">
+      <thead><tr><th>السؤال</th><th>بالملفات المتفرقة</th><th>مع برنامج أو إس</th></tr></thead>
+      <tbody>
+        <tr><td>أين وصل طلب فلان؟</td><td>ثلاثة أشخاص وبريد ومجموعة محادثة.</td><td>حالة واحدة برقم مرجعي، يراها المستفيد وفريقك في اللحظة نفسها.</td></tr>
+        <tr><td>من أين جاء هذا الرقم؟</td><td>من ملف لدى موظف غادر قبل شهرين.</td><td>من قياسات فردية معتمدة، بعدد الأزواج ونسبة التغطية بجانب الرقم.</td></tr>
+        <tr><td>هل هذا هو التقرير الذي أُرسل للمانح؟</td><td>نسخة معدلة من نسخة معدلة.</td><td>لقطة محفوظة بنطاق وتاريخ قطع لا تتغير بعد إصدارها.</td></tr>
+        <tr><td>من اطّلع على بيانات المستفيدين؟</td><td>لا أحد يعرف.</td><td>سجل تدقيق يقول من ومتى ولماذا، لكل عملية.</td></tr>
+        <tr><td>مستفيد طلب حذف بياناته</td><td>بحث يدوي في خمسة أماكن.</td><td>مسار منفذ بمهلة نظامية، وإتلاف باعتماد وشاهد موثق.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="foot"><span>برنامج أو إس · الملف التعريفي</span><span>7</span></div>
+</section>
+
+<section class="page">
+  <div class="eyebrow">الأسعار</div>
+  <h2 class="title">باقة تنمو مع برامجك</h2>
+  <p class="lead">تجربة مجانية أربعة عشر يومًا بكل المزايا وبلا بطاقة ائتمانية. بعدها تختار ما يناسب حجمك، وتغيّر الباقة متى شئت.</p>
+  <div class="plans">
+    <div class="plan">
+      <h3>المجانية</h3>
+      <div class="price">0 <small>ريال شهريًا</small></div>
+      <p class="desc">لتجربة المنصة على برنامج واحد بفريق صغير.</p>
+      <div class="limits">برنامج واحد · 3 أعضاء · 50 مشاركة</div>
+      <ul><li>لوحات التقارير ولقطاتها</li></ul>
+    </div>
+    <div class="plan">
+      <h3>الأساسية</h3>
+      <div class="price">499 <small>ريال شهريًا</small></div>
+      <p class="desc">للجمعيات والمبادرات التي تدير برامج قليلة وتريد سجلًا موثقًا.</p>
+      <div class="limits">3 برامج · 6 أعضاء · 400 مشاركة</div>
+      <ul><li>لوحات التقارير ولقطاتها</li><li>تصدير CSV</li></ul>
+    </div>
+    <div class="plan featured">
+      <h3>النمو</h3>
+      <div class="price">1,499 <small>ريال شهريًا</small></div>
+      <p class="desc">للجهات التي تدير عدة برامج في وقت واحد وتقيس أثرها وتربط أنظمتها.</p>
+      <div class="limits">15 برنامجًا · 25 عضوًا · 3,000 مشاركة</div>
+      <ul><li>لوحات التقارير ولقطاتها</li><li>تصدير CSV</li><li>قياس الأثر بخط أساس وقياس ختامي</li><li>الواجهة البرمجية وإشعارات الأحداث</li><li>الاستيراد من CSV</li><li>المساعد</li></ul>
+    </div>
+    <div class="plan">
+      <h3>المؤسسية</h3>
+      <div class="price">4,999 <small>ريال شهريًا</small></div>
+      <p class="desc">للمؤسسات الكبيرة والجهات الحكومية: بلا حدود، دخول موحّد، ومدير حساب مخصص.</p>
+      <div class="limits">بلا حد للبرامج والأعضاء والمشاركات</div>
+      <ul><li>كل ما في باقة النمو</li><li>الدخول الموحّد</li><li>الرسائل القصيرة وواتساب</li><li>مدير حساب مخصص</li></ul>
+    </div>
+  </div>
+  <h3 style="font-size:11.5pt;margin-top:12pt">في كل الباقات</h3>
+  <div class="all">
+    <span>واجهة عربية وإنجليزية كاملة</span><span>تحقق بخطوتين وسجل تدقيق</span><span>حقوق أصحاب البيانات وسياسة احتفاظ</span>
+    <span>لقطات تقارير ثابتة</span><span>إشعارات داخل المنصة وبالبريد</span><span>دعم عبر البريد</span>
+  </div>
+  <p class="notes">الدفع بمدى والبطاقات الائتمانية وآبل باي، أو بالتحويل البنكي بفاتورة مرجعية. الجهات غير الربحية المرخصة تحصل على خصم 20% على الباقات المدفوعة بعد التحقق من الترخيص، وعقود سنوية بسعر أحد عشر شهرًا. الأسعار لا تشمل ضريبة القيمة المضافة.</p>
+  <div class="foot"><span>برنامج أو إس · الملف التعريفي</span><span>8</span></div>
+</section>
+
+<!-- 9. Back cover -->
+<section class="page dark back">
+  <svg class="rail" viewBox="0 0 64 64" aria-hidden="true"><path d="M50 24C50 35 45 42 32 42C21 42 14.5 37 14.5 30C14.5 25 16 21 18 18" fill="none" stroke="#C16325" stroke-width="5.5" stroke-linecap="round"/><circle cx="18" cy="18" r="4.6" fill="#EEEBDF"/><circle cx="32" cy="52.5" r="3.6" fill="#C16325"/></svg>
+  <div style="position:relative">
+    <div class="eyebrow">الخطوة التالية</div>
+    <h2>جرّب المنصة على برنامج حقيقي</h2>
+    <p class="lead" style="margin-top:10pt">أنشئ مساحة عملك اليوم، وشغّل برنامجًا واحدًا من أوله إلى آخره. إن لم يوفر عليك وقتًا حقيقيًا فلا شيء يلزمك بالاستمرار.</p>
+    <ol class="steps-mini">
+      <li>أنشئ مساحة العمل وادعُ فريقك</li>
+      <li>ابنِ النموذج والمعايير وافتح التسجيل</li>
+      <li>أصدر أول تقرير موثق في أقل من ساعة</li>
+    </ol>
+    <div class="contact">
+      <div><b>الموقع</b><span>{{site}}</span></div>
+      <div><b>البريد</b><span>{{email}}</span></div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:flex-end">
+    <div style="display:flex;align-items:center;gap:10pt">
+      <svg class="mark" viewBox="0 0 64 64" width="44" height="44" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#C16325"/><path d="M50 24C50 35 45 42 32 42C21 42 14.5 37 14.5 30C14.5 25 16 21 18 18" fill="none" stroke="#EEEBDF" stroke-width="5.5" stroke-linecap="round"/><circle cx="18" cy="18" r="4.6" fill="#283543"/><circle cx="32" cy="52.5" r="3.6" fill="#EEEBDF"/></svg>
+      <div><b style="font-size:14pt;display:block;color:var(--ivory)">برنامج أو إس</b><span style="font-size:9.5pt;color:var(--navy-300)">ProgramOS · مبنية للسوق السعودي</span></div>
+    </div>
+    <small style="font-size:9pt;color:var(--navy-300)">© {{year}} ProgramOS. جميع الحقوق محفوظة.</small>
+  </div>
+</section>
+
+</body>
+</html>

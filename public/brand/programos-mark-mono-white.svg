@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="ProgramOS">
+  <path d="M50 24C50 35 45 42 32 42C21 42 14.5 37 14.5 30C14.5 25 16 21 18 18" fill="none" stroke="#FFFFFF" stroke-width="5.5" stroke-linecap="round"/>
+  <circle cx="18" cy="18" r="4.6" fill="#FFFFFF"/>
+  <circle cx="32" cy="52.5" r="3.6" fill="#FFFFFF"/>
+</svg>

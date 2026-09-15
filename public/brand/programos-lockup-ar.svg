@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 64" width="340" height="64" role="img" aria-label="برنامج أو إس">
+  <g transform="translate(276 0)">
+    <rect width="64" height="64" rx="16" fill="#283543"/>
+    <path d="M50 24C50 35 45 42 32 42C21 42 14.5 37 14.5 30C14.5 25 16 21 18 18" fill="none" stroke="#C16325" stroke-width="5.5" stroke-linecap="round"/>
+    <circle cx="18" cy="18" r="4.6" fill="#EEEBDF"/>
+    <circle cx="32" cy="52.5" r="3.6" fill="#C16325"/>
+  </g>
+  <text x="262" y="31" direction="rtl" text-anchor="start" font-family="'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, Arial, sans-serif" font-weight="700" font-size="23" fill="#283543">برنامج أو إس</text>
+  <text x="262" y="50" direction="rtl" text-anchor="start" font-family="'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, Arial, sans-serif" font-weight="400" font-size="11" fill="#566270">منصة إدارة البرامج وقياس الأثر</text>
+</svg>
