@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>دليل المستخدم · برنامج أو إس</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 16mm 14mm 18mm 14mm; }
+  :root {
+    --navy: #283543; --navy-700: #3a4a62; --navy-400: #8a939e; --navy-200: #d6dae0;
+    --copper: #c16325; --copper-500: #e58a3c; --copper-100: #fbeee1;
+    --ivory: #faf9f5; --ivory-300: #f4f2ea; --line: rgba(40,53,67,.12); --text: #1b242e; --muted: #566270;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, Arial, sans-serif; color: var(--text); font-size: 11.5pt; line-height: 1.75; background: #fff; }
+  h1, h2, h3, h4 { font-weight: 700; color: var(--navy); margin: 0; line-height: 1.3; }
+  p { margin: 0 0 8pt; }
+  ul, ol { margin: 0 0 8pt; padding-inline-start: 18pt; }
+  li { margin-bottom: 3pt; }
+  li::marker { color: var(--copper); }
+  strong { font-weight: 600; color: var(--navy); }
+  code, kbd { font-family: Consolas, 'Courier New', monospace; font-size: 9.5pt; background: var(--ivory-300); border-radius: 4px; padding: 1px 5px; direction: ltr; unicode-bidi: embed; }
+
+  /* Cover */
+  .cover { height: 257mm; display: flex; flex-direction: column; justify-content: space-between; page-break-after: always; background: linear-gradient(160deg, var(--navy) 0%, #1b242e 100%); color: #eeebdf; border-radius: 10pt; padding: 22mm 18mm; position: relative; overflow: hidden; }
+  .cover::after { content: ''; position: absolute; inset-inline-end: -60mm; bottom: -60mm; width: 160mm; height: 160mm; border-radius: 50%; border: 18mm solid rgba(229,138,60,.18); }
+  .cover .brand { display: flex; align-items: center; gap: 10pt; }
+  .cover .mark { width: 34pt; height: 34pt; border-radius: 9pt; background: var(--copper); display: grid; place-items: center; }
+  .cover .mark i { width: 10pt; height: 10pt; background: #fff; border-radius: 3pt; display: block; }
+  .cover .brand b { font-size: 16pt; display: block; }
+  .cover .brand span { font-size: 10pt; color: #b9c0c9; }
+  .cover h1 { color: #eeebdf; font-size: 34pt; line-height: 1.2; margin-top: 10mm; }
+  .cover .sub { font-size: 14pt; color: #b9c0c9; margin-top: 8pt; max-width: 120mm; }
+  .cover .meta { font-size: 10.5pt; color: #b9c0c9; display: flex; gap: 18pt; }
+  .cover .meta b { color: #eeebdf; font-weight: 600; }
+  .eyebrow { color: var(--copper); font-size: 9.5pt; font-weight: 600; letter-spacing: .5px; }
+
+  /* Table of contents */
+  .toc { page-break-after: always; }
+  .toc h2 { font-size: 20pt; margin-bottom: 12pt; }
+  .toc ol { list-style: none; padding: 0; margin: 0; counter-reset: toc; }
+  .toc li { counter-increment: toc; display: flex; align-items: baseline; gap: 8pt; padding: 6pt 0; border-bottom: 1px dashed var(--line); font-size: 12pt; }
+  .toc li::before { content: counter(toc); color: var(--copper); font-weight: 700; min-width: 18pt; }
+  .toc li small { color: var(--muted); font-size: 10pt; margin-inline-start: auto; }
+
+  /* Sections */
+  section.chapter { page-break-before: always; }
+  .chapter-head { display: flex; align-items: baseline; gap: 12pt; border-bottom: 2px solid var(--copper); padding-bottom: 8pt; margin-bottom: 14pt; }
+  .chapter-head .num { font-size: 26pt; font-weight: 700; color: var(--copper); line-height: 1; }
+  .chapter-head h2 { font-size: 20pt; }
+  .chapter-head p { color: var(--muted); font-size: 10.5pt; margin: 2pt 0 0; }
+  h3 { font-size: 13.5pt; margin: 14pt 0 6pt; color: var(--navy); }
+  h4 { font-size: 11.5pt; margin: 10pt 0 4pt; color: var(--navy-700); }
+  figure { margin: 10pt 0 14pt; page-break-inside: avoid; }
+  figure img { width: 100%; border: 1px solid var(--line); border-radius: 8pt; display: block; box-shadow: 0 2pt 10pt rgba(40,53,67,.08); }
+  figcaption { font-size: 9.5pt; color: var(--muted); margin-top: 5pt; }
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li { counter-increment: step; position: relative; padding-inline-start: 26pt; margin-bottom: 7pt; }
+  .steps li::before { content: counter(step); position: absolute; inset-inline-start: 0; top: 2pt; width: 18pt; height: 18pt; border-radius: 50%; background: var(--copper); color: #fff; font-size: 9.5pt; font-weight: 700; display: grid; place-items: center; }
+  .note, .tip, .warn { border-radius: 8pt; padding: 9pt 12pt; margin: 10pt 0; font-size: 10.5pt; page-break-inside: avoid; }
+  .note { background: var(--ivory-300); border-inline-start: 4pt solid var(--navy-400); }
+  .tip { background: var(--copper-100); border-inline-start: 4pt solid var(--copper); }
+  .warn { background: #fbe8e6; border-inline-start: 4pt solid #b3392f; }
+  .note b, .tip b, .warn b { display: block; margin-bottom: 2pt; }
+  table { width: 100%; border-collapse: collapse; font-size: 10.5pt; margin: 8pt 0 12pt; page-break-inside: avoid; }
+  th, td { border: 1px solid var(--line); padding: 6pt 8pt; text-align: start; vertical-align: top; }
+  th { background: var(--ivory-300); font-weight: 600; color: var(--navy); }
+  td.center, th.center { text-align: center; }
+  .roles td:first-child { font-weight: 600; white-space: nowrap; }
+  .kpi { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8pt; margin: 8pt 0 12pt; }
+  .kpi div { border: 1px solid var(--line); border-radius: 8pt; padding: 8pt 10pt; }
+  .kpi b { display: block; color: var(--navy); font-size: 11pt; }
+  .kpi span { color: var(--muted); font-size: 10pt; }
+  .end { text-align: center; color: var(--muted); font-size: 10.5pt; margin-top: 30mm; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="brand"><span class="mark"><i></i></span><div><b>برنامج أو إس</b><span>منصة إدارة البرامج والمبادرات وقياس الأثر</span></div></div>
+  <div>
+    <div class="eyebrow">الوثائق</div>
+    <h1>دليل المستخدم</h1>
+    <p class="sub">كيف تدير برنامجاً كاملاً داخل المنصة: من إعداده وفتح التسجيل، إلى المراجعة والقرار والحضور، حتى قياس الأثر وإصدار تقرير يمكن الدفاع عن كل رقم فيه.</p>
+  </div>
+  <div class="meta"><span>الإصدار <b>{{version}}</b></span><span>تاريخ التحديث <b>{{date}}</b></span><span>اللغة <b>العربية</b></span></div>
+</div>
+
+<div class="toc">
+  <div class="eyebrow">المحتويات</div>
+  <h2>ما الذي يغطيه هذا الدليل</h2>
+  <ol>
+    <li>البداية السريعة <small>الحساب والدخول والتحقق بخطوتين</small></li>
+    <li>الأدوار والصلاحيات <small>من يرى ماذا ويفعل ماذا</small></li>
+    <li>لوحة المعلومات <small>قراءة اليوم في دقيقة</small></li>
+    <li>البرامج <small>الإعداد، الاستعداد للنشر، المعاينة، دورة الحالات</small></li>
+    <li>الطلبات والمراجعة والقرار <small>من التقديم إلى القبول</small></li>
+    <li>المستفيدون والمشاركات <small>ملف واحد لكل شخص</small></li>
+    <li>الأنشطة والحضور <small>الجدول وشرط الإكمال</small></li>
+    <li>المؤشرات وقياس الأثر <small>خط الأساس والقياس الختامي</small></li>
+    <li>التقارير والتصدير <small>المؤشرات واللقطات الثابتة</small></li>
+    <li>الخصوصية وحقوق أصحاب البيانات <small>الطلبات والاحتفاظ والإتلاف</small></li>
+    <li>الفريق والصلاحيات وسجل التدقيق <small>الدعوات والنطاق والدعم المؤقت</small></li>
+    <li>التكاملات والاستيراد <small>الواجهة البرمجية والموصلات وCSV</small></li>
+    <li>المساعد <small>مسودات مقترحة تحت إشراف بشري</small></li>
+    <li>الاشتراك والفوترة والدفع <small>الباقات والفواتير والسداد</small></li>
+    <li>أسئلة شائعة وحلول سريعة</li>
+  </ol>
+</div>
+
+<section class="chapter">
+  <div class="chapter-head"><span class="num">01</span><div><h2>البداية السريعة</h2><p>إنشاء مساحة العمل، تفعيل الحساب، والدخول الآمن</p></div></div>
+  <h3>إنشاء مساحة عمل جديدة</h3>
+  <ol class="steps">
+    <li>من الصفحة الرئيسية اضغط <strong>ابدأ تجربة مجانية</strong>، ثم أدخل اسم الجهة بالعربية والإنجليزية، واسمك وبريدك وكلمة مرور من عشرة أحرف على الأقل تشمل حرفاً ورقماً.</li>
+    <li>اختر الباقة. التجربة أربعة عشر يوماً بكل المزايا ولا تحتاج بطاقة.</li>
+    <li>افتح رابط التفعيل الذي يصل إلى بريدك، ثم سجّل الدخول. أنت الآن <strong>مدير النظام</strong> لمساحة العمل.</li>
+  </ol>
+  <h3>الدخول والتحقق بخطوتين</h3>
+  <figure><img src="{{shot:login}}" alt="صفحة تسجيل الدخول"><figcaption>صفحة تسجيل الدخول. الحقل الثالث لرمز تطبيق التحقق، ويلزم لكل أعضاء الفريق.</figcaption></figure>
+  <p>كل أعضاء الفريق، من مدير النظام إلى المشاهد، يدخلون بالبريد وكلمة المرور ورمز من تطبيق تحقق (Google Authenticator أو Microsoft Authenticator أو ما يماثلهما). المستفيد يدخل بالبريد وكلمة المرور فقط. عند أول دخول يطلب النظام ربط التطبيق بمسح رمز أو إدخال السر يدوياً.</p>
+  <div class="note"><b>خمس محاولات ثم إيقاف مؤقت</b>بعد خمس محاولات فاشلة يُقفل البريد خمس عشرة دقيقة. رسالة الخطأ لا تفرّق بين كلمة مرور خاطئة ورمز تحقق فارغ، فتأكد من الرمز قبل أن تفترض أن كلمة المرور هي المشكلة.</div>
+  <div class="tip"><b>الجلسة</b>تنتهي جلسة أعضاء الفريق بعد ثلاثين دقيقة من الخمول. من صفحة الأمان يمكنك الخروج من كل الأجهزة بضغطة واحدة.</div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-head"><span class="num">02</span><div><h2>الأدوار والصلاحيات</h2><p>الصلاحية تجمع الدور مع نطاق البرامج مع حالة العضوية</p></div></div>
+  <table class="roles">
+    <thead><tr><th>الدور</th><th>ما يستطيعه</th><th>ما لا يراه</th></tr></thead>
+    <tbody>
+      <tr><td>مدير النظام</td><td>كل شيء داخل الجهة: الفريق، الباقة، الخصوصية، الإتلاف، التدقيق</td><td>بيانات أي جهة أخرى</td></tr>
+      <tr><td>مدير برامج</td><td>إنشاء البرامج ونشرها، إسناد المقيّمين، القرار النهائي، تأكيد الإكمال</td><td>إعدادات الفوترة والخصوصية على مستوى الجهة</td></tr>
+      <tr><td>منسق</td><td>فرز الطلبات، طلب الاستكمال، الأنشطة والحضور، الملاحظات التشغيلية</td><td>القرار النهائي والتقييم</td></tr>
+      <tr><td>مُقيّم</td><td>تقييم الطلبات المسندة إليه فقط بمعايير موزونة</td><td>طلبات لم تُسند إليه، وأسماء المقيّمين الآخرين</td></tr>
+      <tr><td>أخصائي أثر</td><td>تعريف المؤشرات، تسجيل القياسات واعتمادها، لقطات التقارير</td><td>القرارات على الطلبات</td></tr>
+      <tr><td>مشاهد</td><td>لوحات وأرقام مجمعة داخل نطاقه</td><td>الأسماء والبيانات الشخصية، والمجموعات الأقل من خمسة أفراد</td></tr>
+      <tr><td>مستفيد</td><td>التقديم، متابعة طلباته وجدوله، تعديل بياناته، طلبات الخصوصية</td><td>أي شيء يتعلق بمستفيد آخر</td></tr>
+    </tbody>
+  </table>
+  <p>لكل موظف <strong>نطاق برامج</strong>: قائمة البرامج التي يعمل عليها. الموظف خارج نطاق برنامج لا يرى طلباته ولا مستفيديه، حتى لو كان الدور يسمح نظرياً. مدير النظام يرى الجميع داخل جهته.</p>
+  <div class="note"><b>لماذا يخفي المشاهد المجموعات الصغيرة؟</b>لأن متوسط قياس لأربعة أشخاص قد يكشف قيمة فرد. تظهر النتائج المجمعة للمشاهد فقط حين تكتمل خمسة أزواج قياس على الأقل.</div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-head"><span class="num">03</span><div><h2>لوحة المعلومات</h2><p>أول صفحة بعد الدخول: حال الجهة اليوم وما يحتاج انتباهك</p></div></div>
+  <figure><img src="{{shot:dashboard}}" alt="لوحة المعلومات"><figcaption>أربعة أرقام في الأعلى، ثم قائمة "يحتاج انتباهك"، ثم مسار الطلبات وإشغال المقاعد والأنشطة القادمة وأبرز المؤشرات.</figcaption></figure>
+  <div class="kpi">
+    <div><b>البرامج</b><span>كل البرامج غير المؤرشفة</span></div>
+    <div><b>الطلبات</b><span>الطلبات المقدمة، وعدد ما ينتظر قراراً</span></div>
+    <div><b>الملتحقون</b><span>مشاركات قائمة لم تُسحب ولم تُلغَ</span></div>
+    <div><b>نسبة الإكمال</b><span>المكتملون من كل المشاركات المنشأة بقبول</span></div>
+  </div>
+  <p>قائمة <strong>يحتاج انتباهك</strong> تجمع ما تأخر: طلبات تنتظر التقييم، طلبات تجاوزت مهلة الاستكمال، قياسات تنتظر الاعتماد، وطلبات خصوصية قاربت مهلتها. كل بند ينقلك إلى الصفحة المعنية مباشرة.</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-head"><span class="num">04</span><div><h2>البرامج</h2><p>من المسودة إلى الأرشفة عبر حالات محددة لا تُقفز</p></div></div>
+  <figure><img src="{{shot:programs}}" alt="صفحة البرامج"><figcaption>بطاقة لكل برنامج: الحالة، الفترة، والمقاعد المشغولة. زر المبادرات في الشريط لتجميع البرامج تحت هدف واحد.</figcaption></figure>
+  <h3>إنشاء برنامج</h3>
+  <ol class="steps">
+    <li>اضغط <strong>برنامج جديد</strong> وأدخل الاسم والوصف باللغتين، وعدد المقاعد، وفترتي التنفيذ والتسجيل. يجب أن تنتهي فترة التسجيل قبل بداية البرنامج.</li>
+    <li>حدد <strong>حد الإكمال</strong> (نسبة الحضور المطلوبة) وهل يلزم قياس ختامي لاعتماد الإكمال.</li>
+    <li>اكتب <strong>إشعار الخصوصية</strong> بالعربية والإنجليزية. يراه المستفيد قبل التقديم ويُحفظ إقراره بنسخة النص.</li>
+    <li>ابنِ <strong>نموذج التقديم</strong>: نص قصير أو طويل، رقم، تاريخ، اختيار واحد أو متعدد، أو مرفق. الحد ثلاثون حقلاً وخمسة مرفقات.</li>
+    <li>أضف <strong>معايير التقييم</strong> بأوزان مجموعها 100. تُثبَّت المعايير والنموذج عند أول نشر ولا تتغير أثناء استقبال الطلبات.</li>
+  </ol>
+  <h3>الاستعداد للنشر والمعاينة</h3>
+  <p>افتح البرنامج وأنت في حالة المسودة. تظهر بطاقة <strong>الاستعداد للنشر</strong> بأربع علامات: نموذج بحقل واحد على الأقل، معايير مجموعها 100، إشعار خصوصية باللغتين، ومسؤول برنامج فعّال. لا يُقبل النشر قبل اكتمالها، والرسالة تذكر ما ينقص بالاسم.</p>
+  <p>زر <strong>معاينة صفحة البرنامج</strong> يعرض الصفحة كما سيراها المستفيد تماماً: الوصف والمواعيد والمقاعد وإشعار الخصوصية وحقول النموذج وإقرار الموافقة، وكلها معطّلة فلا يمكن الإرسال من المعاينة.</p>
+  <h3>دورة الحالات</h3>
+  <table>
+    <thead><tr><th>من</th><th>إلى</th><th>ما يحدث</th></tr></thead>
+    <tbody>
+      <tr><td>مسودة</td><td>منشور</td><td>الصفحة تصبح مرئية للمستفيدين داخل الجهة دون إمكانية التقديم</td></tr>
+      <tr><td>منشور</td><td>التسجيل مفتوح</td><td>يُقبل التقديم داخل نافذة التسجيل فقط، حتى لو بقيت الصفحة مفتوحة</td></tr>
+      <tr><td>التسجيل مفتوح</td><td>التسجيل مغلق</td><td>تتوقف الطلبات الجديدة وتبقى القائمة للمراجعة والقرار</td></tr>
+      <tr><td>التسجيل مغلق</td><td>قائم</td><td>يلزم ألا يبقى طلب بلا قرار؛ المقبولون يتحولون إلى "قيد التنفيذ"</td></tr>
+      <tr><td>قائم</td><td>مكتمل</td><td>يلزم ألا تبقى مشاركة قائمة بلا إكمال أو سحب</td></tr>
+      <tr><td>مكتمل أو ملغى</td><td>مؤرشف</td><td>للقراءة والتقارير فقط</td></tr>
+    </tbody>
+  </table>
+  <div class="warn"><b>الإلغاء</b>إلغاء برنامج له مشاركات يحوّل مشاركاته القائمة إلى ملغاة بسبب مسجل ويبقي الطلبات المقبولة وتاريخها. لا يوجد تراجع عن الإلغاء.</div>
+  <h3>تعديل برنامج منشور</h3>
+  <p>يمكن تعديل الاسم وعدد المقاعد ونهاية التسجيل ونهاية البرنامج مع ذكر السبب. يُسجل التعديل في سجل التدقيق بالقيمتين السابقة والجديدة، ويُبلَّغ الملتحقون عند تغيير الجدول. تغيير بنية النموذج أو المعايير بعد النشر يتطلب برنامجاً جديداً، حماية لعدالة المقارنة بين المتقدمين.</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-head"><span class="num">05</span><div><h2>الطلبات والمراجعة والقرار</h2><p>كل طلب له رقم مرجعي ولقطة ثابتة من إجاباته</p></div></div>
+  <figure><img src="{{shot:applications}}" alt="صفحة الطلبات"><figcaption>قائمة الطلبات بالتصفية بالبرنامج والحالة والتاريخ، وخمسة وعشرون طلباً في الصفحة.</figcaption></figure>
+  <h3>رحلة الطلب</h3>
+  <ol class="steps">
+    <li><strong>مسودة</strong>: يحفظ المستفيد إجاباته ويعود لها. المسودة لا تصل إلى الفريق.</li>
+    <li><strong>مُقدَّم</strong>: عند الإرسال يُنشأ رقم مرجعي بصيغة <code>2026-A1B2C3</code> ولقطة من الإجابات، ويُسجل إقرار إشعار الخصوصية.</li>
+    <li><strong>قيد المراجعة</strong>: المنسق يفرز الطلب، وقد يطلب <strong>استكمالاً</strong> لحقول محددة بمهلة. المستفيد يعدّل تلك الحقول فقط، وتُحفظ الإجابات السابقة كنسخة.</li>
+    <li><strong>التقييم</strong>: مدير البرنامج يسند مقيّمين. كل مقيّم يقر بعدم تعارض المصالح ثم يمنح درجة من 0 إلى 5 لكل معيار. الدرجة النهائية للمقيّم هي مجموع (الوزن × الدرجة ÷ 5)، والدرجة العامة متوسط المقيّمين المكتملين.</li>
+    <li><strong>القرار</strong>: قبول أو قائمة انتظار أو رفض مع سبب مكتوب. القبول ينشئ مشاركة ويحجز مقعداً. اتخاذ القرار قبل اكتمال التقييمات يتطلب مبرر تجاوز من عشرة أحرف على الأقل.</li>
+  </ol>
+  <div class="tip"><b>آخر مقعد</b>إذا تسابق قراران على المقعد الأخير في اللحظة نفسها يفوز واحد فقط، ويعود الثاني برسالة اكتمال المقاعد. لا يحدث تجاوز للسعة أبداً.</div>
+  <div class="note"><b>الانقطاع أثناء الإرسال</b>إعادة إرسال الطلب نفسه بعد انقطاع الشبكة لا ينشئ طلباً ثانياً ولا بريداً ثانياً؛ يعود النظام بالنتيجة المحفوظة نفسها.</div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-head"><span class="num">06</span><div><h2>المستفيدون والمشاركات</h2><p>ملف واحد للشخص داخل الجهة، ومشاركة مستقلة لكل برنامج</p></div></div>
+  <figure><img src="{{shot:beneficiaries}}" alt="صفحة المستفيدين"><figcaption>القائمة على جانب والملف على الجانب الآخر: المشاركات، الحضور، الموافقات، والملاحظات التشغيلية.</figcaption></figure>
+  <p>يُنشأ ملف المستفيد عند أول طلب مقدم ويُربط بحسابه. لا يُدمج الملف عبر الجهات: الشخص نفسه في جهتين له ملفان مستقلان. حالة الملف (فعّال، مؤرشف) منفصلة عن حالة كل مشاركة، فالانسحاب من برنامج لا يمس برنامجاً آخر.</p>
+  <h3>ما يستطيعه الفريق من هنا</h3>
+  <ul>
+    <li>تحويل المشاركة: تعليق، استئناف، سحب، إلغاء، أو تأكيد الإكمال بعد تحقق شروطه. كل تحويل يحتاج سبباً من ثلاثة أحرف على الأقل.</li>
+    <li>إعادة فتح طلب مسحوب بقرار مدير.</li>
+    <li>حفظ <strong>ملاحظة تشغيلية</strong> خاصة بالبرنامج، للفريق فقط، لا تظهر للمستفيد ولا في التصدير.</li>
+    <li>لمدير النظام: أرشفة الملف أو إعادة تفعيله، ووضع <strong>حجز قانوني</strong> يوقف أي إتلاف.</li>
+  </ul>
+  <div class="warn"><b>لا بيانات حساسة</b>الملاحظات التشغيلية ليست مكاناً لمعلومات صحية أو دينية أو مالية. المنصة لا تجمع الهوية الوطنية ولا البيانات الحساسة في هذا الإصدار.</div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-head"><span class="num">07</span><div><h2>الأنشطة والحضور</h2><p>الجدول، تسجيل الحضور، وشرط الإكمال المحسوب آلياً</p></div></div>
+  <figure><img src="{{shot:activities}}" alt="صفحة الأنشطة"><figcaption>اختر البرنامج ثم النشاط، وسجّل الحضور لكل مشارك.</figcaption></figure>
+  <ol class="steps">
+    <li>أنشئ نشاطاً بعنوان ونوع وموعد ومكان أو رابط، داخل مدة البرنامج، وحدد هل هو <strong>مطلوب</strong> للإكمال.</li>
+    <li>عند التنفيذ سجّل لكل مشارك: حاضر، غائب، معتذر، أو غير مسجل. تعديل الحضور لاحقاً يتطلب سبباً ويُحفظ التاريخ.</li>
+    <li>نسبة الحضور = الحاضرون ÷ الأنشطة المطلوبة غير المعتذر عنها. تُقارن بحد الإكمال، ويؤكد المدير الإكمال بعد تحقق الشرط، والقياس الختامي إن كان مطلوباً.</li>
+  </ol>
+  <div class="note"><b>إلغاء نشاط</b>النشاط الملغى يخرج من حساب الإكمال ويُبلَّغ المشاركون مرة واحدة. المشاركة المنسحبة لا تُسجل في نشاط مستقبلي.</div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-head"><span class="num">08</span><div><h2>المؤشرات وقياس الأثر</h2><p>نقيس التغيّر بين خط أساس وقياس ختامي معتمدين، ولا ندّعي ما لا يثبته القياس</p></div></div>
+  <figure><img src="{{shot:impact}}" alt="صفحة المؤشرات والأثر"><figcaption>لكل مؤشر: متوسط التغير، عدد الأزواج المكتملة، نسبة التغطية، والمستهدف. أسفلها القياسات التي تنتظر الاعتماد.</figcaption></figure>
+  <h3>تعريف مؤشر</h3>
+  <p>اسم، وحدة، اتجاه التحسن (كلما زاد كان أفضل أو كلما قلّ)، مستهدف، طريقة تجميع (متوسط، مجموع، عدد، نسبة)، مصدر البيانات، وفترة القياس. لا يُقبل قياس بلا وحدة أو فترة.</p>
+  <h3>القياس والاعتماد</h3>
+  <ol class="steps">
+    <li>سجّل <strong>خط الأساس</strong> لكل مشاركة قبل التنفيذ، ثم <strong>القياس الختامي</strong> بعده، مع تاريخ ومصدر ودليل اختياري.</li>
+    <li>القياس يبدأ بحالة مسودة. يعتمده أخصائي الأثر أو يعيده للتصحيح. تصحيح قياس معتمد ينشئ نسخة جديدة بسبب إلزامي.</li>
+    <li>تُحسب النتائج من القياسات <strong>المعتمدة</strong> فقط، ولأزواج المشاركات المكتملة فقط. يُعرض مع كل رقم عدد الأزواج ونسبة التغطية حتى يعرف القارئ قوة الدليل.</li>
+  </ol>
+  <div class="tip"><b>غير متاح بدل صفر</b>حين يكون المقام صفراً (لا أزواج مكتملة مثلاً) تظهر "غير متاح" لا 0%، لأن الصفر هنا ادعاء لا قياس.</div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-head"><span class="num">09</span><div><h2>التقارير والتصدير</h2><p>مؤشرات تشغيل معرّفة، ولقطات لا تتغير بعد حفظها</p></div></div>
+  <figure><img src="{{shot:reports}}" alt="صفحة التقارير"><figcaption>ملفات التصدير برابط مؤقت، جدول مؤشرات الأداء لكل برنامج، قمع الطلبات، تقرير الأثر، واللقطات المحفوظة.</figcaption></figure>
+  <h3>التصدير</h3>
+  <p>اختر النطاق (كل البرامج أو برنامج واحد) ونوع الملف: أداء البرامج، الطلبات، الحضور، أو النتائج. يُنتج الملف كوظيفة خلفية بصيغة CSV عربية UTF-8، ويظهر رابط تنزيل صالح <strong>خمس عشرة دقيقة</strong>، ويُعاد التحقق من صلاحيتك عند التنزيل. كل تصدير مسجل في التدقيق.</p>
+  <h3>اللقطات المحفوظة</h3>
+  <p>احفظ لقطة نتائج بعنوان ونطاق وتاريخ قطع. تحمل اللقطة معايير التصفية ونسخة صيغ المؤشرات وتاريخ الاستخراج، وتبقى قابلة لإعادة العرض كما كانت حتى بعد تعديل القياسات لاحقاً. هذا ما يجعل تقرير الممول قابلاً للدفاع بعد سنة.</p>
+  <table>
+    <thead><tr><th>المؤشر</th><th>الصيغة</th></tr></thead>
+    <tbody>
+      <tr><td>معدل القبول</td><td>المقبولون ÷ من اتُّخذ فيهم قرار × 100</td></tr>
+      <tr><td>وسيط زمن القرار</td><td>وسيط الساعات بين التقديم وأول قرار</td></tr>
+      <tr><td>إشغال البرنامج</td><td>المشاركات القائمة ÷ المقاعد × 100</td></tr>
+      <tr><td>نسبة الإكمال</td><td>المكتملون ÷ كل المشاركات المنشأة بقبول × 100</td></tr>
+      <tr><td>متوسط التغير</td><td>متوسط (الختامي − الأساس) للأزواج المكتملة المعتمدة</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="chapter">
+  <div class="chapter-head"><span class="num">10</span><div><h2>الخصوصية وحقوق أصحاب البيانات</h2><p>الوصول، النسخة، التصحيح، الإتلاف، وسحب الموافقة</p></div></div>
+  <figure><img src="{{shot:privacy}}" alt="صفحة الخصوصية"><figcaption>طلبات أصحاب البيانات بحالاتها ومهلها، الموافقات، وقائمة الإتلاف حسب مدة الاحتفاظ.</figcaption></figure>
+  <ol class="steps">
+    <li>يرفع صاحب البيانات طلباً من حسابه، أو يسجله الفريق نيابة عنه.</li>
+    <li>يتحقق مدير النظام من الهوية دون جمع بيانات زائدة، ويحدد النطاق والاستثناءات.</li>
+    <li>يعتمد الاستجابة أو الرفض المسبب وينفذ. حزمة بيانات "النسخة" لا يفتحها إلا صاحبها من حسابه.</li>
+  </ol>
+  <h3>الاحتفاظ والإتلاف</h3>
+  <p>مهمة يومية تفحص استحقاق الإتلاف حسب فئة البيانات ومدتها وتولّد قائمة انتظار. الإتلاف يحتاج اعتماد مدير النظام، ويتوقف أمام مشاركة قائمة أو حجز قانوني. بعد الإتلاف يبقى <strong>شاهد إتلاف</strong> يثبت أن السجل كان موجوداً وأُتلف، دون أي بيانات شخصية.</p>
+  <div class="note"><b>الموافقة</b>حين يعتمد البرنامج على الموافقة تُسجل موافقة منفصلة قابلة للسحب، بنسخة النص ووقت الإقرار. رسائل أمان الحساب تبقى مفعّلة دائماً، والتذكيرات الاختيارية يوقفها الشخص من تفضيلاته.</div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-head"><span class="num">11</span><div><h2>الفريق والصلاحيات وسجل التدقيق</h2><p>الدعوات، نطاق البرامج، الدعم المؤقت، وكل عملية مسجلة</p></div></div>
+  <figure><img src="{{shot:team}}" alt="صفحة الفريق"><figcaption>الأعضاء بأدوارهم ونطاقهم، منح الوصول المؤقت للدعم، وسجل التدقيق بالتصفية.</figcaption></figure>
+  <ul>
+    <li><strong>الدعوة</strong>: رابط أحادي الاستخدام صالح 48 ساعة بدور ونطاق برامج محددين. إلغاء العضوية يُبطل الرابط والجلسات فوراً.</li>
+    <li><strong>نطاق البرامج</strong>: لكل موظف قائمة البرامج التي يعمل عليها، ويمكن تعديلها في أي وقت من زر "تعديل".</li>
+    <li><strong>الدعم المؤقت</strong>: يمنح مدير النظام مشغّل المنصة وصولاً بمدة محددة (ساعة كحد أقصى في كل جلسة) وسبب مسجل، وينتهي تلقائياً.</li>
+    <li><strong>سجل التدقيق</strong>: من فعل، وماذا، ومتى، ولماذا، مع معرّف تتبع يربط العملية بطلبها. لا يُعدَّل ولا يُحذف من واجهات العمل.</li>
+  </ul>
+</section>
+
+<section class="chapter">
+  <div class="chapter-head"><span class="num">12</span><div><h2>التكاملات والاستيراد</h2><p>مفاتيح واجهة برمجية، إشعارات أحداث موقّعة، موصلات، تقويم، واستيراد CSV</p></div></div>
+  <figure><img src="{{shot:integrations}}" alt="صفحة التكاملات"><figcaption>مفاتيح الواجهة البرمجية، إشعارات الأحداث وسجل تسليمها، الموصلات، والاستيراد من CSV بمعاينة.</figcaption></figure>
+  <ul>
+    <li><strong>مفاتيح الواجهة البرمجية</strong>: يظهر المفتاح مرة واحدة عند إنشائه ويُحفظ منه التجزئة فقط. لكل مفتاح صلاحيات محددة، والتدوير يوقف القديم فوراً.</li>
+    <li><strong>إشعارات الأحداث</strong>: توقيع HMAC يشمل الوقت داخل النص الموقّع، ومحاولات إعادة إرسال متدرجة تنتهي بإيقاف قابل لإعادة التشغيل.</li>
+    <li><strong>التقويم</strong>: رابط iCalendar لكل برنامج يعمل في أي تطبيق تقويم، يحمل المواعيد والأماكن دون أي بيانات مشارك.</li>
+    <li><strong>الاستيراد من CSV</strong>: معاينة تعرض ما سيحدث لكل سطر وسبب كل رفض دون كتابة أي شيء، ثم تنفيذ. السطر الخاطئ لا يمنع بقية الملف، ولا تُنشأ حسابات ولا تُرسل دعوات إلا باختيار صريح.</li>
+  </ul>
+</section>
+
+<section class="chapter">
+  <div class="chapter-head"><span class="num">13</span><div><h2>المساعد</h2><p>مسودات مقترحة، معطّل افتراضياً، ولا يقرر شيئاً</p></div></div>
+  <figure><img src="{{shot:assistant}}" alt="صفحة المساعد"><figcaption>ثلاث مهام: مسودة برنامج بمؤشرات مقترحة، ملخص نتائج، وبحث في مستندات الجهة.</figcaption></figure>
+  <p>يفعّله مدير النظام بإقرار طريقة المعالجة، وله سقف إنفاق شهري يوقفه وحده عند بلوغه. كل رقم في ملخص النتائج يجب أن يطابق قياساً محسوباً في النظام وإلا رُفض الملخص كاملاً. مخرجاته مسودات حتى يعتمدها شخص باسمه، ولا يملك أي مسار كتابة إلى الطلبات أو القرارات أو الأهلية.</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-head"><span class="num">14</span><div><h2>الاشتراك والفوترة والدفع</h2><p>الباقات، الاستهلاك، الفواتير، والسداد الإلكتروني أو بالتحويل</p></div></div>
+  <figure><img src="{{shot:billing}}" alt="صفحة الاشتراك والفوترة"><figcaption>الخطة الحالية والاستهلاك مقابل الحدود، والفواتير بحالاتها وزر السداد.</figcaption></figure>
+  <table>
+    <thead><tr><th>الباقة</th><th class="center">الشهر</th><th class="center">برامج</th><th class="center">أعضاء</th><th class="center">مشاركات</th><th>أبرز ما تشمله</th></tr></thead>
+    <tbody>
+      <tr><td>المجانية</td><td class="center">0</td><td class="center">1</td><td class="center">3</td><td class="center">50</td><td>لوحات التقارير</td></tr>
+      <tr><td>الأساسية</td><td class="center">499 ر.س</td><td class="center">3</td><td class="center">6</td><td class="center">400</td><td>التقارير وتصدير CSV</td></tr>
+      <tr><td>النمو</td><td class="center">1,499 ر.س</td><td class="center">15</td><td class="center">25</td><td class="center">3,000</td><td>قياس الأثر، الواجهة البرمجية، الاستيراد، المساعد</td></tr>
+      <tr><td>المؤسسية</td><td class="center">4,999 ر.س</td><td class="center">بلا حد</td><td class="center">بلا حد</td><td class="center">بلا حد</td><td>الدخول الموحّد، الرسائل، مدير حساب مخصص</td></tr>
+    </tbody>
+  </table>
+  <p>الأسعار شهرية ولا تشمل ضريبة القيمة المضافة. الجهات غير الربحية المرخصة تحصل على خصم 20% بعد التحقق من الترخيص، والعقود السنوية بسعر أحد عشر شهراً.</p>
+  <h3>دورة الاشتراك</h3>
+  <p>تجربة 14 يوماً ← فاتورة عند انتهائها ← مهلة سداد 14 يوماً ← سماح 7 أيام ← تعليق مساحة العمل بلا حذف أي بيانات ← استعادة فورية عند السداد. الترقية تسري فوراً وتفتح فاتورة بالفرق، والتخفيض يسري عند التجديد ولا يُقبل إن ترك بيانات فوق حدود الباقة الجديدة.</p>
+  <h3>السداد</h3>
+  <ul>
+    <li><strong>إلكترونياً</strong>: زر "سداد" على الفاتورة ينقلك إلى صفحة دفع آمنة تقبل مدى وفيزا وماستركارد وآبل باي. عند العودة يتأكد النظام من الدفع مباشرة ويفعّل الاشتراك في اللحظة نفسها.</li>
+    <li><strong>بالتحويل البنكي</strong>: يعرض النظام رقماً مرجعياً تذكره في التحويل، ويفعّل مشغّل المنصة الاشتراك عند تأكيد وصول المبلغ.</li>
+  </ul>
+  <div class="note"><b>لا تُحفظ بيانات البطاقة</b>الدفع يتم لدى بوابة مرخصة من البنك المركزي السعودي، ولا يمر رقم البطاقة بخوادم المنصة. يجب أن يطابق المبلغ الفاتورة إلى الهللة وإلا أُحيل للمراجعة دون تفعيل.</div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-head"><span class="num">15</span><div><h2>أسئلة شائعة وحلول سريعة</h2><p>ما يسأل عنه المستخدمون في الأسبوع الأول</p></div></div>
+  <h4>لا يمكنني نشر البرنامج</h4>
+  <p>انظر بطاقة "الاستعداد للنشر" داخل البرنامج؛ العنصر بعلامة حمراء هو الناقص. الأكثر شيوعاً: نموذج بلا حقول أو مجموع أوزان لا يساوي 100.</p>
+  <h4>المستفيد لا يستطيع التقديم</h4>
+  <p>تأكد أن الحالة "التسجيل مفتوح" وأن اليوم داخل نافذة التسجيل، وأن بريد المستفيد مؤكد، وأنه لا يملك طلباً سابقاً في البرنامج نفسه.</p>
+  <h4>لا أرى طلبات برنامج معين</h4>
+  <p>البرنامج خارج نطاقك. اطلب من مدير النظام إضافته إلى نطاق برامجك من صفحة الفريق.</p>
+  <h4>لا أستطيع تسجيل الدخول رغم صحة كلمة المرور</h4>
+  <p>غالباً رمز التحقق فارغ أو منتهٍ؛ أدخل الرمز الحالي من تطبيق التحقق. بعد خمس محاولات فاشلة انتظر خمس عشرة دقيقة.</p>
+  <h4>ظهر "غير متاح" في التقرير</h4>
+  <p>لا يوجد مقام للحساب بعد: لا قرارات، أو لا أزواج قياس مكتملة ومعتمدة. سجّل القياسات واعتمدها ثم أعد العرض.</p>
+  <h4>أريد حذف بيانات مستفيد</h4>
+  <p>لا تُحذف البيانات مباشرة من الواجهة. سجّل طلب إتلاف من صفحة الخصوصية، وسيمر بالتحقق من الهوية والحجز القانوني والاعتماد، ويترك شاهد إتلاف.</p>
+  <h4>كيف أتواصل مع الدعم؟</h4>
+  <p>من صفحة "تواصل معنا" في الموقع، أو عبر مدير حسابك في الباقة المؤسسية. عند الحاجة لتدخل تقني يمكن لمدير النظام منح مشغّل المنصة وصولاً مؤقتاً محدود المدة والغاية من صفحة الفريق.</p>
+  <p class="end">انتهى الدليل · برنامج أو إس · {{date}}</p>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+import {createConnection} from 'node:net';
+export function fileType(bytes:Buffer,name:string){const ext=name.split('.').pop()?.toLowerCase();if(ext==='pdf'&&bytes.subarray(0,5).toString()==='%PDF-')return 'application/pdf';if(ext==='png'&&bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])))return 'image/png';if(['jpg','jpeg'].includes(ext??'')&&bytes[0]===255&&bytes[1]===216&&bytes[2]===255)return 'image/jpeg';return null;}
+export async function scan(bytes:Buffer):Promise<'Clean'|'Rejected'|'Pending'>{
+ // Without a scanner, production keeps files quarantined until scan:files runs against one; development accepts files that passed the type check so the flow can be exercised locally.
+ if(!process.env.CLAMAV_HOST)return process.env.NODE_ENV==='production'&&process.env.FILE_SCAN_BYPASS!=='1'?'Pending':'Clean';
+ return new Promise(resolve=>{const socket=createConnection({host:process.env.CLAMAV_HOST!,port:Number(process.env.CLAMAV_PORT??3310)});let result='';socket.setTimeout(30000);socket.on('connect',()=>{socket.write('zINSTREAM\0');for(let i=0;i<bytes.length;i+=65536){const chunk=bytes.subarray(i,i+65536),size=Buffer.alloc(4);size.writeUInt32BE(chunk.length);socket.write(size);socket.write(chunk);}socket.write(Buffer.alloc(4));});socket.on('data',chunk=>{result+=chunk.toString();if(result.includes('\0'))socket.end();});socket.on('end',()=>resolve(result.includes(' FOUND')?'Rejected':result.includes(': OK')?'Clean':'Pending'));socket.on('timeout',()=>{socket.destroy();resolve('Pending');});socket.on('error',()=>resolve('Pending'));});
+}

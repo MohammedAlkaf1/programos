@@ -1,0 +1,782 @@
+generator client {
+  provider = "prisma-client"
+  output = "../src/generated/prisma"
+}
+datasource db {
+  provider = "postgresql"
+}
+model User {
+  mfaSecret String?
+  mfaEnabled Boolean @default(false)
+  mfaLastStep Int @default(0)
+  sessionVersion Int @default(1)
+  reminders Boolean @default(true)
+  lastSeenAt DateTime?
+  id String @id @default(uuid())
+  email String @unique
+  name String
+  password String
+  verified Boolean @default(false)
+  active Boolean @default(true)
+  createdAt DateTime @default(now())
+  memberships Membership[]
+}
+model Tenant {
+  id String @id @default(uuid())
+  slug String @unique
+  nameAr String
+  nameEn String
+  status String @default("Active")
+  retentionMonths Int @default(24)
+  deleteAt DateTime?
+  createdAt DateTime @default(now())
+  memberships Membership[]
+  subscription Subscription?
+}
+model Membership {
+  id String @id @default(uuid())
+  userId String
+  tenantId String
+  role String
+  active Boolean @default(true)
+  programIds String[] @default([])
+  expiresAt DateTime?
+  supportGrant Boolean @default(false)
+  user User @relation(fields:[userId],references:[id])
+  tenant Tenant @relation(fields:[tenantId],references:[id])
+  @@unique([tenantId,userId])
+}
+model Initiative {
+  ownerId String?
+  status String @default("Active")
+  id String @id @default(uuid())
+  tenantId String
+  nameAr String
+  nameEn String
+  objective String
+  createdAt DateTime @default(now())
+  @@unique([tenantId,id])
+}
+model Program {
+  ownerId String?
+  id String @id @default(uuid())
+  tenantId String
+  initiativeId String?
+  nameAr String
+  nameEn String
+  descriptionAr String
+  descriptionEn String
+  category String @default("Development")
+  status String @default("Draft")
+  capacity Int
+  startsAt DateTime
+  endsAt DateTime
+  registrationStart DateTime
+  registrationEnd DateTime
+  completionThreshold Int @default(80)
+  requireEndline Boolean @default(false)
+  form Json @default("[]")
+  rubric Json @default("[]")
+  privacyAr String
+  privacyEn String
+  version Int @default(1)
+  createdAt DateTime @default(now())
+  applications Application[]
+  activities Activity[]
+  indicators Indicator[]
+  @@unique([tenantId,id])
+  @@index([tenantId,status])
+}
+model Beneficiary {
+  legalHold Boolean @default(false)
+  id String @id @default(uuid())
+  tenantId String
+  userId String
+  name String
+  email String
+  phone String?
+  status String @default("Active")
+  createdAt DateTime @default(now())
+  applications Application[]
+  @@unique([tenantId,userId])
+  @@unique([tenantId,id])
+}
+model Application {
+  id String @id @default(uuid())
+  tenantId String
+  programId String
+  beneficiaryId String
+  status String @default("Draft")
+  answers Json @default("{}")
+  formSnapshot Json @default("[]")
+  privacySnapshot String @default("")
+  reviewerIds String[] @default([])
+  reference String @default("")
+  infoFields String[] @default([])
+  needsInfo String?
+  infoDue DateTime?
+  decisionReason String?
+  submittedAt DateTime?
+  firstDecidedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  version Int @default(1)
+  program Program @relation(fields:[tenantId,programId],references:[tenantId,id])
+  beneficiary Beneficiary @relation(fields:[tenantId,beneficiaryId],references:[tenantId,id])
+  evaluations Evaluation[]
+  enrollment Enrollment?
+  @@unique([programId,beneficiaryId])
+  @@unique([tenantId,id])
+  @@index([tenantId,status])
+}
+model Evaluation {
+  id String @id @default(uuid())
+  tenantId String
+  applicationId String
+  reviewerId String
+  score Float
+  scores Json
+  comment String
+  conflict Boolean @default(false)
+  createdAt DateTime @default(now())
+  application Application @relation(fields:[tenantId,applicationId],references:[tenantId,id])
+  @@unique([applicationId,reviewerId])
+}
+model Enrollment {
+  id String @id @default(uuid())
+  tenantId String
+  applicationId String @unique
+  status String @default("Enrolled")
+  previousStatus String?
+  reason String?
+  createdAt DateTime @default(now())
+  completedAt DateTime?
+  application Application @relation(fields:[tenantId,applicationId],references:[tenantId,id])
+  attendance Attendance[]
+  measurements Measurement[]
+  @@unique([tenantId,applicationId])
+  @@unique([tenantId,id])
+}
+model Activity {
+  id String @id @default(uuid())
+  tenantId String
+  programId String
+  nameAr String
+  nameEn String
+  startsAt DateTime
+  endsAt DateTime
+  location String
+  required Boolean @default(true)
+  type String @default("Session")
+  capacity Int?
+  status String @default("Scheduled")
+  program Program @relation(fields:[tenantId,programId],references:[tenantId,id])
+  attendance Attendance[]
+  @@unique([tenantId,id])
+}
+model Attendance {
+  id String @id @default(uuid())
+  tenantId String
+  activityId String
+  enrollmentId String
+  status String @default("NotRecorded")
+  reason String?
+  activity Activity @relation(fields:[tenantId,activityId],references:[tenantId,id])
+  enrollment Enrollment @relation(fields:[tenantId,enrollmentId],references:[tenantId,id])
+  @@unique([activityId,enrollmentId])
+}
+model Indicator {
+  id String @id @default(uuid())
+  tenantId String
+  programId String
+  nameAr String
+  nameEn String
+  unit String
+  target Float
+  direction String @default("Higher")
+  aggregation String @default("average")
+  source String @default("")
+  period String @default("")
+  ownerId String?
+  program Program @relation(fields:[tenantId,programId],references:[tenantId,id])
+  measurements Measurement[]
+  @@unique([tenantId,id])
+}
+model Measurement {
+  id String @id @default(uuid())
+  tenantId String
+  indicatorId String
+  enrollmentId String
+  period String
+  value Float
+  status String @default("Draft")
+  source String
+  measuredAt DateTime @default(now())
+  evidenceId String?
+  revision Int @default(1)
+  reason String?
+  createdAt DateTime @default(now())
+  indicator Indicator @relation(fields:[tenantId,indicatorId],references:[tenantId,id])
+  enrollment Enrollment @relation(fields:[tenantId,enrollmentId],references:[tenantId,id])
+  @@unique([indicatorId,enrollmentId,period])
+}
+model Audit {
+  id String @id @default(uuid())
+  tenantId String
+  actorId String
+  action String
+  entityId String
+  detail Json @default("{}")
+  correlationId String @default("")
+  createdAt DateTime @default(now())
+  @@index([tenantId,createdAt])
+  @@index([tenantId,action])
+}
+model Notification {
+  id String @id @default(uuid())
+  tenantId String
+  userId String
+  titleAr String
+  titleEn String
+  href String @default("")
+  read Boolean @default(false)
+  createdAt DateTime @default(now())
+  @@index([tenantId,userId])
+}
+model PrivacyRequest {
+  fulfilledAt DateTime?
+  id String @id @default(uuid())
+  tenantId String
+  userId String
+  type String
+  status String @default("New")
+  reason String?
+  dueAt DateTime
+  createdAt DateTime @default(now())
+  @@index([tenantId])
+}
+model ReportSnapshot {
+  id String @id @default(uuid())
+  tenantId String
+  userId String
+  title String
+  data Json
+  createdAt DateTime @default(now())
+  @@index([tenantId])
+}
+model AuthAttempt {
+  key String @id
+  count Int @default(0)
+  resetAt DateTime
+}
+model Invitation {
+  id String @id @default(uuid())
+  tenantId String
+  email String
+  role String
+  programIds String[] @default([])
+  tokenHash String @unique
+  expiresAt DateTime
+  usedAt DateTime?
+}
+model Outbox {
+  dedupeKey String? @unique
+  id String @id @default(uuid())
+  tenantId String
+  channel String @default("Email")
+  recipient String
+  subject String
+  body String
+  templateCode String?
+  status String @default("Queued")
+  attempts Int @default(0)
+  nextAttemptAt DateTime @default(now())
+  providerRef String?
+  deliveredAt DateTime?
+  failure String?
+  createdAt DateTime @default(now())
+  @@index([tenantId,status])
+}
+model AuthToken {
+  id String @id @default(uuid())
+  userId String
+  tokenHash String @unique
+  purpose String
+  payload String?
+  expiresAt DateTime
+  usedAt DateTime?
+}
+
+model OperationalNote {
+  id String @id @default(uuid())
+  tenantId String
+  programId String
+  beneficiaryId String
+  actorId String
+  body String
+  createdAt DateTime @default(now())
+  @@index([tenantId,programId,beneficiaryId])
+}
+
+model ApplicationRevision {
+  id String @id @default(uuid())
+  tenantId String
+  applicationId String
+  revision Int
+  answers Json
+  actorId String
+  reason String
+  createdAt DateTime @default(now())
+  @@unique([applicationId,revision])
+}
+
+model ConsentRecord {
+  id String @id @default(uuid())
+  tenantId String
+  beneficiaryId String
+  applicationId String
+  noticeVersion Int
+  noticeText String
+  purpose String @default("")
+  givenAt DateTime @default(now())
+  withdrawnAt DateTime?
+  @@index([tenantId,beneficiaryId])
+}
+
+model ExportJob {
+  id String @id @default(uuid())
+  tenantId String
+  userId String
+  type String
+  status String @default("Queued")
+  filters Json @default("{}")
+  rows Int @default(0)
+  bytes Bytes?
+  error String?
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  completedAt DateTime?
+  @@index([tenantId,userId])
+}
+
+model IdempotencyKey {
+  id String @id
+  userId String
+  action String
+  status Int
+  body Json
+  createdAt DateTime @default(now())
+}
+
+model DeletionCandidate {
+  id String @id @default(uuid())
+  tenantId String
+  beneficiaryId String
+  reason String
+  dueAt DateTime
+  status String @default("Pending")
+  decidedBy String?
+  decidedAt DateTime?
+  createdAt DateTime @default(now())
+  @@unique([tenantId,beneficiaryId])
+}
+
+model DeletionTombstone {
+  id String @id @default(uuid())
+  tenantId String
+  beneficiaryId String
+  approvedBy String
+  reason String
+  createdAt DateTime @default(now())
+  @@unique([tenantId,beneficiaryId])
+}
+
+model Attachment {
+  id String @id @default(uuid())
+  tenantId String
+  programId String
+  userId String
+  name String
+  mime String
+  bytes Bytes
+  size Int
+  status String @default("Pending")
+  createdAt DateTime @default(now())
+  @@index([tenantId,programId,userId])
+}
+
+// ── Subscription billing ────────────────────────────────────────────
+// Money is stored in the currency's minor unit (halalas) as an integer,
+// never a float, so totals never drift.
+
+model Plan {
+  id           String         @id @default(uuid())
+  code         String         @unique
+  nameAr       String
+  nameEn       String
+  descriptionAr String        @default("")
+  descriptionEn String        @default("")
+  priceMonthly Int
+  currency     String         @default("SAR")
+  maxPrograms  Int
+  maxMembers   Int
+  maxEnrollments Int
+  features     String[]       @default([])
+  active       Boolean        @default(true)
+  sortOrder    Int            @default(0)
+  createdAt    DateTime       @default(now())
+  subscriptions Subscription[]
+}
+
+model Subscription {
+  id                 String    @id @default(uuid())
+  tenantId           String    @unique
+  planId             String
+  status             String    @default("Trialing")
+  trialEndsAt        DateTime?
+  currentPeriodStart DateTime  @default(now())
+  currentPeriodEnd   DateTime
+  cancelAtPeriodEnd  Boolean   @default(false)
+  provider           String    @default("manual")
+  providerRef        String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  version            Int       @default(1)
+  tenant             Tenant    @relation(fields: [tenantId], references: [id])
+  plan               Plan      @relation(fields: [planId], references: [id])
+  invoices           Invoice[]
+  @@index([status, currentPeriodEnd])
+}
+
+model Invoice {
+  id             String       @id @default(uuid())
+  tenantId       String
+  subscriptionId String
+  number         String       @unique
+  amount         Int
+  currency       String       @default("SAR")
+  status         String       @default("Open")
+  periodStart    DateTime
+  periodEnd      DateTime
+  issuedAt       DateTime     @default(now())
+  dueAt          DateTime
+  paidAt         DateTime?
+  provider       String       @default("manual")
+  providerRef    String?
+  note           String?
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id])
+  @@index([tenantId, issuedAt])
+}
+
+// Guards against a webhook or retry applying the same payment twice.
+model BillingEvent {
+  id          String   @id @default(uuid())
+  provider    String
+  externalId  String
+  type        String
+  payload     Json     @default("{}")
+  processedAt DateTime @default(now())
+  @@unique([provider, externalId])
+}
+
+// -- Phase two: integrations, import and AI ---------------------------
+// Everything below is optional per tenant. A workspace that enables none of it
+// behaves exactly as before, and every switch here fails closed.
+
+/// A per tenant credential for the public API. Only the hash is stored; the
+/// plaintext is shown once at creation and never again.
+model ApiKey {
+  id String @id @default(uuid())
+  tenantId String
+  name String
+  prefix String @unique
+  tokenHash String @unique
+  scopes String[] @default([])
+  createdBy String
+  expiresAt DateTime?
+  lastUsedAt DateTime?
+  revokedAt DateTime?
+  rotatedFrom String?
+  createdAt DateTime @default(now())
+  @@index([tenantId])
+}
+
+/// Where a tenant wants domain events delivered. The secret signs the body.
+model WebhookEndpoint {
+  id String @id @default(uuid())
+  tenantId String
+  url String
+  secret String
+  events String[] @default([])
+  active Boolean @default(true)
+  createdBy String
+  lastSuccessAt DateTime?
+  lastFailureAt DateTime?
+  createdAt DateTime @default(now())
+  deliveries WebhookDelivery[]
+  @@index([tenantId])
+}
+
+/// One attempt chain per event per endpoint. An exhausted chain becomes a dead
+/// letter the tenant admin can inspect and replay.
+model WebhookDelivery {
+  id String @id @default(uuid())
+  tenantId String
+  endpointId String
+  eventId String
+  event String
+  payload Json
+  status String @default("Queued")
+  attempts Int @default(0)
+  nextAttemptAt DateTime @default(now())
+  responseCode Int?
+  error String?
+  deliveredAt DateTime?
+  createdAt DateTime @default(now())
+  endpoint WebhookEndpoint @relation(fields:[endpointId],references:[id])
+  @@unique([endpointId,eventId])
+  @@index([tenantId,status])
+}
+
+/// The append only record of what happened, independent of who listens.
+model DomainEvent {
+  id String @id @default(uuid())
+  tenantId String
+  type String
+  entityId String
+  payload Json
+  actorId String
+  createdAt DateTime @default(now())
+  @@index([tenantId,type])
+  @@index([tenantId,createdAt])
+}
+
+/// Any signed message received from an outside provider. The unique pair is the
+/// replay guard: the same delivery twice changes nothing the second time.
+model InboundEvent {
+  id String @id @default(uuid())
+  provider String
+  externalId String
+  type String
+  tenantId String?
+  payload Json
+  status String @default("Processed")
+  error String?
+  receivedAt DateTime @default(now())
+  @@unique([provider,externalId])
+  @@index([provider,receivedAt])
+}
+
+/// A CSV import: uploaded, previewed with a field map, then applied row by row.
+model ImportJob {
+  id String @id @default(uuid())
+  tenantId String
+  userId String
+  kind String
+  filename String
+  programId String?
+  status String @default("Draft")
+  mapping Json @default("{}")
+  options Json @default("{}")
+  source String
+  totalRows Int @default(0)
+  createdRows Int @default(0)
+  skippedRows Int @default(0)
+  errorRows Int @default(0)
+  report Json @default("[]")
+  appliedAt DateTime?
+  createdAt DateTime @default(now())
+  @@index([tenantId])
+}
+
+/// An outbound or inbound connector to a calendar, LMS, CRM or BI tool.
+model Connector {
+  id String @id @default(uuid())
+  tenantId String
+  kind String
+  name String
+  config Json @default("{}")
+  fieldMap Json @default("{}")
+  scopes String[] @default([])
+  secret String
+  status String @default("Active")
+  lastRunAt DateTime?
+  lastError String?
+  createdBy String
+  createdAt DateTime @default(now())
+  runs ConnectorRun[]
+  @@index([tenantId])
+}
+
+/// One delivery attempt chain for one connector payload.
+model ConnectorRun {
+  id String @id @default(uuid())
+  tenantId String
+  connectorId String
+  direction String @default("Outbound")
+  event String
+  payload Json
+  status String @default("Queued")
+  attempts Int @default(0)
+  nextAttemptAt DateTime @default(now())
+  error String?
+  completedAt DateTime?
+  createdAt DateTime @default(now())
+  connector Connector @relation(fields:[connectorId],references:[id])
+  @@index([tenantId,status])
+}
+
+/// Where an imported or synced record came from, and whether it disagrees with
+/// what the connector last sent.
+model ExternalRef {
+  id String @id @default(uuid())
+  tenantId String
+  entity String
+  entityId String
+  source String
+  externalId String
+  checksum String
+  conflict Boolean @default(false)
+  conflictDetail Json?
+  syncedAt DateTime @default(now())
+  @@unique([tenantId,source,entity,externalId])
+  @@index([tenantId,entity,entityId])
+}
+
+/// Single sign on for one tenant over OIDC. Matching is by verified email on a
+/// claimed domain only, so an unverified claim can never take over an account.
+model SsoConfig {
+  id String @id @default(uuid())
+  tenantId String @unique
+  issuer String
+  clientId String
+  clientSecret String
+  domains String[] @default([])
+  defaultRole String @default("Viewer")
+  autoProvision Boolean @default(false)
+  active Boolean @default(false)
+  createdBy String
+  createdAt DateTime @default(now())
+  links SsoLink[]
+}
+
+/// The proven link between one external subject and one local user.
+model SsoLink {
+  id String @id @default(uuid())
+  tenantId String
+  userId String
+  subject String
+  email String
+  linkedAt DateTime @default(now())
+  revokedAt DateTime?
+  config SsoConfig @relation(fields:[tenantId],references:[tenantId])
+  @@unique([tenantId,subject])
+  @@index([tenantId,userId])
+}
+
+/// Consent to receive messages on a channel. No consent, no message.
+model MessagingConsent {
+  id String @id @default(uuid())
+  tenantId String
+  userId String
+  channel String
+  address String
+  optedIn Boolean @default(false)
+  verifiedAt DateTime?
+  source String @default("Workspace")
+  updatedAt DateTime @updatedAt
+  @@unique([tenantId,userId,channel])
+  @@index([tenantId,channel])
+}
+
+/// A fixed message template per channel. Free text is never sent over SMS or
+/// WhatsApp, so a template approved by the provider stays valid.
+model MessagingTemplate {
+  id String @id @default(uuid())
+  tenantId String
+  code String
+  channel String
+  bodyAr String
+  bodyEn String
+  approved Boolean @default(false)
+  providerRef String?
+  createdAt DateTime @default(now())
+  @@unique([tenantId,code,channel])
+}
+
+/// Per tenant AI governance. Disabled by default: nothing leaves the workspace
+/// until an admin enables it and accepts the processing terms.
+model AiSetting {
+  id String @id @default(uuid())
+  tenantId String @unique
+  enabled Boolean @default(false)
+  provider String @default("anthropic")
+  model String @default("claude-opus-5")
+  monthlyCap Int @default(50000)
+  spentThisMonth Int @default(0)
+  periodStart DateTime @default(now())
+  retainDays Int @default(30)
+  approvedBy String?
+  approvedAt DateTime?
+  terms String @default("")
+  updatedAt DateTime @updatedAt
+}
+
+/// One AI call: what was asked, what came back, what it cost, who approved the
+/// result. Drafts are never published by the model itself.
+model AiRun {
+  id String @id @default(uuid())
+  tenantId String
+  userId String
+  feature String
+  model String
+  status String @default("Draft")
+  prompt String
+  output Json?
+  citations Json @default("[]")
+  inputTokens Int @default(0)
+  outputTokens Int @default(0)
+  cost Int @default(0)
+  error String?
+  approvedBy String?
+  approvedAt DateTime?
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  @@index([tenantId,feature])
+  @@index([tenantId,createdAt])
+}
+
+/// A tenant document the assistant may search. Retrieval is filtered by tenant
+/// before any text reaches the model.
+model KnowledgeDoc {
+  id String @id @default(uuid())
+  tenantId String
+  programId String?
+  title String
+  body String
+  tags String[] @default([])
+  createdBy String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([tenantId])
+}
+
+/// A message from the public contact form. Kept apart from every tenant table:
+/// a visitor is not a member of anyone workspace, and this row must never be
+/// reachable through a tenant scoped query.
+model ContactLead {
+  id String @id @default(uuid())
+  name String
+  email String
+  organization String
+  phone String?
+  topic String
+  message String
+  locale String @default("ar")
+  source String @default("website")
+  status String @default("New")
+  handledBy String?
+  handledAt DateTime?
+  createdAt DateTime @default(now())
+  @@index([status,createdAt])
+}

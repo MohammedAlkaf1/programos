@@ -1,0 +1,103 @@
+# ProgramOS: full production stack on one host.
+#
+#   cp .env.example .env        then fill the values
+#   docker compose up -d --build
+#   docker compose logs -f app
+#
+# Optional file scanning with ClamAV:
+#   docker compose --profile scan up -d
+#   and set CLAMAV_HOST=clamav in .env
+
+x-worker: &worker
+  build:
+    context: .
+    target: worker
+  image: programos-worker:latest
+  env_file: .env
+  environment:
+    DATABASE_URL: postgresql://programos:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@db:5432/programos
+    NODE_ENV: production
+  volumes:
+    - app-data:/app/data
+  depends_on:
+    migrate:
+      condition: service_completed_successfully
+  restart: unless-stopped
+
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: programos
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: programos
+      POSTGRES_INITDB_ARGS: --encoding=UTF8 --locale=C
+      TZ: Asia/Riyadh
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U programos -d programos"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  # Runs once per deploy: schema migrations, then plan sync.
+  migrate:
+    <<: *worker
+    command: sh -c "npx prisma migrate deploy && npm run plans:sync"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+
+  app:
+    build:
+      context: .
+      target: app
+    image: programos:latest
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://programos:${POSTGRES_PASSWORD}@db:5432/programos
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: 3000
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    volumes:
+      - app-data:/app/data
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  mail-worker:
+    <<: *worker
+    command: npm run mail:worker
+
+  integrations-worker:
+    <<: *worker
+    command: npm run integrations:worker
+
+  # reminders hourly, file scan every minute, housekeeping and billing daily.
+  scheduler:
+    <<: *worker
+    command: npm run scheduler
+
+  clamav:
+    image: clamav/clamav:stable
+    profiles: ["scan"]
+    volumes:
+      - clamav-data:/var/lib/clamav
+    healthcheck:
+      test: ["CMD", "clamdscan", "--ping", "1"]
+      interval: 60s
+      timeout: 10s
+      retries: 5
+      start_period: 5m
+    restart: unless-stopped
+
+volumes:
+  db-data:
+  app-data:
+  clamav-data:
