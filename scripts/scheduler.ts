@@ -3,7 +3,7 @@
  * cron. Each job runs as its own child process through the same entry points
  * the README documents, so nothing here can drift from running them by hand.
  *
- *   npm run scheduler                       all jobs
+ *   npm run scheduler                       all jobs (scan files, reminders, housekeeping, billing, backups)
  *   npm run scheduler -- scan-files reminders   only the named jobs
  *
  * A job never overlaps with itself: a slow run simply delays the next one.
@@ -11,6 +11,7 @@
 import 'dotenv/config';
 import { spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
+import { captureError } from '../src/lib/errors';
 
 const require = createRequire(import.meta.url);
 const tsxCli = require.resolve('tsx/cli');
@@ -26,6 +27,8 @@ const ALL_JOBS: Job[] = [
   { name: 'reminders', script: 'scripts/reminders.ts', every: HOUR },
   { name: 'housekeeping', script: 'scripts/housekeeping.ts', every: DAY },
   { name: 'billing-cycle', script: 'scripts/billing.ts', every: DAY, args: ['cycle'] },
+  { name: 'backup', script: 'scripts/backup.ts', every: DAY, args: ['run'] },
+  { name: 'backup-requests', script: 'scripts/backup.ts', every: MINUTE, args: ['pending'] },
 ];
 
 const selected = process.argv.slice(2);
@@ -50,6 +53,7 @@ function run(job: Job) {
     running.delete(job.name);
     const seconds = Math.round((Date.now() - startedAt) / 1000);
     console.log(`[scheduler] ${job.name} finished with code ${code} after ${seconds}s`);
+    if (code !== 0) void captureError(new Error(`${job.name} exited with code ${code}`), { source: 'worker', path: `scheduler:${job.name}`, context: { seconds } });
   });
   child.on('error', (error) => {
     running.delete(job.name);

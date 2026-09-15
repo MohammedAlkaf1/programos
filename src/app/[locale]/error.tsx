@@ -12,6 +12,19 @@ export default function ErrorBoundary({
 }) {
   useEffect(() => {
     console.error('render_failure', error.digest ?? error.name);
+    // Tell the platform. Same-origin, no personal data: message, digest, stack head and the page.
+    fetch('/api/errors', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        name: error.name,
+        message: String(error.message ?? '').slice(0, 500),
+        digest: error.digest ?? null,
+        stack: String(error.stack ?? '').slice(0, 2000),
+        path: window.location.pathname,
+      }),
+      keepalive: true,
+    }).catch(() => {});
   }, [error]);
 
   return (

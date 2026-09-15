@@ -1,6 +1,7 @@
 import { cache } from 'react';
 import { redirect } from 'next/navigation';
 import { actor } from './access';
+import { isOperator } from './operator-access';
 import { getState } from './state';
 import { DomainError } from './domain';
 import type { AppState } from './types';
@@ -41,6 +42,8 @@ export async function requireState(locale: Locale): Promise<AppState> {
     return await loadState();
   } catch (error) {
     if(error instanceof DomainError&&error.code==='mfaRequired')redirect(`/${locale}/security`);
+    // A platform operator need not belong to any tenant; their home is the operator panel.
+    if (error instanceof DomainError && error.status === 403 && (await isOperator())) redirect(`/${locale}/operator`);
     if (error instanceof DomainError && (error.status === 401 || error.status === 403)) {
       redirect(`/${locale}/login`);
     }

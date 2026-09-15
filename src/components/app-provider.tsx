@@ -59,7 +59,8 @@ export function AppProvider({ locale, children }: { locale: Locale; children: Re
     async (action, data = {}) => {
       setBusy(true);
       try {
-        const response = await fetch('/api/command', {
+        // Operator panel actions carry the platform prefix and have their own gate.
+        const response = await fetch(action.startsWith('platform.') ? '/api/operator' : '/api/command', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ action, data }),

@@ -24,6 +24,7 @@ export type ActorState = {
   name: string;
   tenantStatus: string;
   correlationId: string;
+  platformOperator?: boolean;
 };
 
 export type ActivityState = {

@@ -12,6 +12,7 @@ model User {
   sessionVersion Int @default(1)
   reminders Boolean @default(true)
   lastSeenAt DateTime?
+  platformOperator Boolean @default(false)
   id String @id @default(uuid())
   email String @unique
   name String
@@ -454,6 +455,8 @@ model Invoice {
   subscriptionId String
   number         String       @unique
   amount         Int
+  netAmount      Int          @default(0)
+  vatAmount      Int          @default(0)
   currency       String       @default("SAR")
   status         String       @default("Open")
   periodStart    DateTime
@@ -779,4 +782,42 @@ model ContactLead {
   handledAt DateTime?
   createdAt DateTime @default(now())
   @@index([status,createdAt])
+}
+
+/// One backup of the whole database: requested from the operator panel or by
+/// the scheduler, produced by scripts/backup.ts, optionally copied off site.
+model BackupRun {
+  id          String    @id @default(uuid())
+  status      String    @default("Requested")
+  trigger     String    @default("schedule")
+  requestedBy String?
+  startedAt   DateTime?
+  finishedAt  DateTime?
+  file        String?
+  bytes       Int?
+  tables      Int?
+  rows        Int?
+  checksum    String?
+  remote      String?
+  error       String?
+  createdAt   DateTime  @default(now())
+  @@index([status, createdAt])
+}
+
+/// Server, worker and browser failures grouped by fingerprint, so the operator
+/// sees one row with a count instead of a thousand identical lines.
+model ErrorEvent {
+  id          String    @id @default(uuid())
+  fingerprint String    @unique
+  source      String
+  name        String
+  message     String
+  stack       String    @default("")
+  path        String    @default("")
+  count       Int       @default(1)
+  context     Json      @default("{}")
+  firstSeenAt DateTime  @default(now())
+  lastSeenAt  DateTime  @default(now())
+  resolvedAt  DateTime?
+  @@index([resolvedAt, lastSeenAt])
 }

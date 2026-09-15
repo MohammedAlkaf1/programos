@@ -10,6 +10,7 @@ import {
   Ban,
   RotateCcw,
   Receipt,
+  FileDown,
 } from 'lucide-react';
 import {
   Badge,
@@ -338,6 +339,7 @@ export function BillingView({
                     </Td>
                     <Td className="whitespace-nowrap font-medium tabular-nums">
                       {formatMoney(invoice.amount, invoice.currency, locale)}
+                      <span className="block text-[11px] text-[var(--text-faint)]">{t.billing.vatIncluded}</span>
                     </Td>
                     <Td>
                       <StatusBadge
@@ -354,6 +356,15 @@ export function BillingView({
                     </Td>
                     <Td>
                       <span className="flex justify-end">
+                        <a
+                          href={`/api/invoices/${invoice.id}/pdf?locale=${locale}`}
+                          target="_blank"
+                          rel="noopener"
+                          className="inline-flex h-8 items-center gap-1.5 rounded-[10px] border border-[var(--line-strong)] px-3 text-[13px] font-medium text-[var(--text-strong)] hover:bg-[var(--surface-sunken)]"
+                        >
+                          <FileDown size={14} />
+                          {t.billing.pdf}
+                        </a>
                         {invoice.status === 'Open' ? (
                           <Button
                             size="sm"

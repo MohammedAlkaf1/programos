@@ -10,6 +10,7 @@
  * server — and so nothing is silently dropped.
  */
 import 'dotenv/config';
+import { captureError } from '../src/lib/errors';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { PrismaClient } from '../src/generated/prisma/client.js';
@@ -128,7 +129,7 @@ if (watch) {
   console.log('mail worker started (every 15s) — Ctrl+C to stop');
   await once();
   const timer = setInterval(() => {
-    once().catch((error) => console.error(error));
+    once().catch((error) => { console.error(error); void captureError(error, { source: 'worker', path: 'mail:worker' }); });
   }, 15_000);
   for (const signal of ['SIGINT', 'SIGTERM']) {
     process.on(signal, async () => {

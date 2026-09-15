@@ -4,6 +4,7 @@ import {command} from '@/lib/commands';
 import {DomainError} from '@/lib/domain';
 import {db} from '@/lib/db';
 import {ZodError} from 'zod';
+import {captureError} from '@/lib/errors';
 const LIMIT=240,WINDOW=60000;
 /** Per user fair use bucket (NFR-12). Shares the AuthAttempt table so no new infrastructure is needed. */
 async function throttle(userId:string){
@@ -34,7 +35,7 @@ export async function POST(req:NextRequest){
  }
  catch(e){
   let status=500,error='server';
-  if(e instanceof DomainError){status=e.status;error=e.code;}else if(e instanceof ZodError||e instanceof SyntaxError){status=422;error='invalid';}else console.error('command_failure',correlationId,e instanceof Error?e.name:'unknown');
+  if(e instanceof DomainError){status=e.status;error=e.code;}else if(e instanceof ZodError||e instanceof SyntaxError){status=422;error='invalid';}else{console.error('command_failure',correlationId,e instanceof Error?e.name:'unknown');await captureError(e,{source:'api',path:'/api/command',context:{correlationId}});}
   if(key){if(status<500)await db.idempotencyKey.update({where:{id:key},data:{status,body:{error}}}).catch(()=>{});else await db.idempotencyKey.delete({where:{id:key}}).catch(()=>{});}
   return respond(status,{error},correlationId);
  }

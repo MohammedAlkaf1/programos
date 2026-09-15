@@ -42,9 +42,11 @@ ENV NODE_ENV=production \
     HOSTNAME=0.0.0.0 \
     PORT=3000 \
     TZ=Asia/Riyadh
-RUN apk add --no-cache tzdata wget \
+# chromium renders the PDF invoices (Arabic needs a real text engine); Noto Arabic covers the offline case.
+RUN apk add --no-cache tzdata wget chromium nss freetype harfbuzz ca-certificates ttf-freefont font-noto-arabic \
  && addgroup -S programos && adduser -S programos -G programos \
  && mkdir -p /app/data && chown -R programos:programos /app
+ENV CHROMIUM_PATH=/usr/bin/chromium-browser
 COPY --from=build --chown=programos:programos /app/.next/standalone ./
 COPY --from=build --chown=programos:programos /app/.next/static ./.next/static
 COPY --from=build --chown=programos:programos /app/public ./public

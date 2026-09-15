@@ -5,6 +5,7 @@ import {db} from './db';
 import {programAccess,requireRole,type Actor} from './access';
 import {DomainError,canTransition,weightedScore,completion,roles,publishBlockers} from './domain';
 import {assertWithinPlan,nextInvoiceNumber,paymentProvider,moyasar,settleExternalPayment,DUE_DAYS} from './billing';
+import {invoiceAmounts} from './plan-math';
 import {validateAnswers} from './answers';
 import {emit} from './events';
 import {queueMessage} from './messaging';
@@ -236,7 +237,7 @@ export async function command(a:Actor,action:string,input:unknown){
    if(!r.count)throw new DomainError('conflict',409);
    if(upgrade&&sub.status!=='Trialing'&&plan.priceMonthly>0){
     const number=await nextInvoiceNumber(tx as never);
-    await tx.invoice.create({data:{tenantId:a.tenantId,subscriptionId:sub.id,number,amount:plan.priceMonthly,currency:plan.currency,periodStart:sub.currentPeriodStart,periodEnd:sub.currentPeriodEnd,dueAt:new Date(Date.now()+DUE_DAYS*86400000),provider:process.env.BILLING_PROVIDER??'manual'}});
+    await tx.invoice.create({data:{tenantId:a.tenantId,subscriptionId:sub.id,number,...invoiceAmounts(plan.priceMonthly),currency:plan.currency,periodStart:sub.currentPeriodStart,periodEnd:sub.currentPeriodEnd,dueAt:new Date(Date.now()+DUE_DAYS*86400000),provider:process.env.BILLING_PROVIDER??'manual'}});
    }
    await tx.subscription.update({where:{id:sub.id},data:{version:{increment:1}}});
    await log(tx,sub.id,{from:sub.plan.code,to:plan.code});

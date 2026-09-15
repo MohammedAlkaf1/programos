@@ -11,6 +11,7 @@
  * program operation because nothing here runs inside a request.
  */
 import 'dotenv/config';
+import { captureError } from '../src/lib/errors';
 import {db} from '../src/lib/db';
 import {sign} from '../src/lib/signature';
 import {nextAttempt,MAX_ATTEMPTS} from '../src/lib/events';
@@ -93,7 +94,7 @@ async function once(){
 if(watch){
  console.log(`integration worker started (every 15s, up to ${MAX_ATTEMPTS} attempts per payload) — Ctrl+C to stop`);
  await once();
- const timer=setInterval(()=>{once().catch(error=>console.error(error));},15000);
+ const timer=setInterval(()=>{once().catch(error=>{console.error(error);void captureError(error,{source:'worker',path:'integrations:worker'});});},15000);
  for(const signal of ['SIGINT','SIGTERM'])process.on(signal,async()=>{clearInterval(timer);await db.$disconnect();process.exit(0);});
 }else{
  await once();

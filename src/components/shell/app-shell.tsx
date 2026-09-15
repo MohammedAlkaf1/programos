@@ -13,6 +13,7 @@ import {
   Menu,
   X,
   AlertTriangle,
+  ShieldCheck,
 } from 'lucide-react';
 import { Avatar, Badge, Button, cx } from '@/components/ui';
 import { LocaleToggle } from './locale-toggle';
@@ -81,6 +82,18 @@ export function AppShell({ state, children }: { state: AppState; children: React
           </div>
         );
       })}
+      {state.actor.platformOperator ? (
+        <div>
+          <p className="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-navy-400">{t.operator.nav.operatorLabel}</p>
+          <Link
+            href={`${base}/operator`}
+            className="group relative flex items-center gap-3 rounded-[10px] px-3 py-2.5 text-[13.5px] font-medium text-copper-500 transition-all duration-150 hover:bg-navy-800/60"
+          >
+            <ShieldCheck size={17} />
+            <span className="truncate">{t.operator.title}</span>
+          </Link>
+        </div>
+      ) : null}
     </nav>
   );
 

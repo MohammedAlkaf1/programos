@@ -3,7 +3,7 @@ import {cookies,headers} from 'next/headers';
 import {randomUUID} from 'node:crypto';
 import {db} from './db';
 import {DomainError,type Role} from './domain';
-export type Actor={userId:string;tenantId:string;role:Role;programIds:string[];name:string;tenantStatus:string;correlationId:string};
+export type Actor={userId:string;tenantId:string;role:Role;programIds:string[];name:string;tenantStatus:string;correlationId:string;platformOperator:boolean};
 const IDLE_MS=30*60000;
 export async function actor():Promise<Actor>{
  const session=await auth();if(!session?.user?.id)throw new DomainError('unauthorized',401);
@@ -23,7 +23,7 @@ export async function actor():Promise<Actor>{
   if(!user.lastSeenAt||now.getTime()-user.lastSeenAt.getTime()>60000)await db.user.update({where:{id:user.id},data:{lastSeenAt:now}});
  }
  let correlationId:string=randomUUID();try{const h=(await headers()).get('x-request-id');if(h&&/^[a-zA-Z0-9-]{8,64}$/.test(h))correlationId=h;}catch{}
- return {userId:user.id,tenantId:membership.tenantId,role:membership.role as Role,programIds:membership.programIds,name:user.name,tenantStatus:membership.tenant.status,correlationId};
+ return {userId:user.id,tenantId:membership.tenantId,role:membership.role as Role,programIds:membership.programIds,name:user.name,tenantStatus:membership.tenant.status,correlationId,platformOperator:user.platformOperator};
 }
 export function requireRole(a:Actor,allowed:Role[]){if(!allowed.includes(a.role))throw new DomainError('forbidden',403);}
 export function scope(a:Actor){return {tenantId:a.tenantId,...(['Admin','Beneficiary'].includes(a.role)?{}:{id:{in:a.programIds}})};}

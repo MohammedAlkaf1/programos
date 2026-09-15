@@ -1,5 +1,5 @@
 import { db } from './db';
-import { addMonths, DUE_DAYS, GRACE_DAYS } from './plan-math';
+import { addMonths, invoiceAmounts, DUE_DAYS, GRACE_DAYS } from './plan-math';
 import { nextInvoiceNumber } from './billing';
 
 /**
@@ -67,7 +67,7 @@ export async function runBillingCycle(now = new Date()): Promise<CycleReport> {
             tenantId: subscription.tenantId,
             subscriptionId: subscription.id,
             number,
-            amount: subscription.plan.priceMonthly,
+            ...invoiceAmounts(subscription.plan.priceMonthly),
             currency: subscription.plan.currency,
             periodStart,
             periodEnd,
@@ -118,7 +118,7 @@ export async function runBillingCycle(now = new Date()): Promise<CycleReport> {
             tenantId: subscription.tenantId,
             subscriptionId: subscription.id,
             number,
-            amount: subscription.plan.priceMonthly,
+            ...invoiceAmounts(subscription.plan.priceMonthly),
             currency: subscription.plan.currency,
             periodStart,
             periodEnd,
