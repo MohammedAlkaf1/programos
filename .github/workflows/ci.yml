@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    name: تحقق (فحص الأنواع + الاختبارات + البناء)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: programos
+          POSTGRES_PASSWORD: programos
+          POSTGRES_DB: programos
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U programos"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://programos:programos@127.0.0.1:5432/programos?schema=public
+      AUTH_SECRET: ci-only-placeholder-secret-value-32ch
+      APP_URL: http://127.0.0.1:3000
+      AUTH_URL: http://127.0.0.1:3000
+      NEXT_TELEMETRY_DISABLED: "1"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: تثبيت الحزم
+        run: npm ci
+
+      - name: توليد عميل Prisma
+        run: npx prisma generate
+
+      - name: تطبيق الترحيلات
+        run: npx prisma migrate deploy
+
+      - name: فحص الأنواع
+        run: npm run typecheck
+
+      - name: اختبارات الوحدة
+        run: npm test
+
+      - name: البناء
+        run: npm run build
