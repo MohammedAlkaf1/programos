@@ -49,7 +49,7 @@ export async function actorForKey(token:string):Promise<{actor:Actor;keyId:strin
  const role:Role=roles.includes('Manager')?'Manager':roles.includes('Coordinator')?'Coordinator':roles.includes('Impact')?'Impact':'Viewer';
  const programIds=(await db.program.findMany({where:{tenantId:key.tenantId},select:{id:true}})).map(p=>p.id);
  await db.apiKey.update({where:{id:key.id},data:{lastUsedAt:new Date()}});
- return {keyId:key.id,scopes:key.scopes,actor:{userId:`apikey:${key.id}`,tenantId:key.tenantId,role,programIds,name:key.name,tenantStatus:tenant.status,correlationId:randomBytes(8).toString('hex')}};
+ return {keyId:key.id,scopes:key.scopes,actor:{userId:`apikey:${key.id}`,tenantId:key.tenantId,role,programIds,name:key.name,tenantStatus:tenant.status,correlationId:randomBytes(8).toString('hex'),platformOperator:false}};
 }
 
 export function requireScope(held:string[],needed:Scope){
