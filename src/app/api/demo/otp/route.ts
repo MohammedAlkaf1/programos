@@ -16,7 +16,7 @@ import { otp, unseal } from '@/lib/totp';
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  if (process.env.NODE_ENV === 'production' || !demoLoginEnabled()) {
+  if (!demoLoginEnabled()) {
     return NextResponse.json({ error: 'notFound' }, { status: 404 });
   }
   const account = await db.user.findFirst({
